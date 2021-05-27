@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="leaflet/leaflet.css"/>
     <script src="leaflet/leaflet.js"></script>
+    <script src="js/leaflet-providers.js"></script>
 
 
 	<style>
@@ -91,8 +92,10 @@
 		});
 	}
 	
-	// Mapa base
-	var basemap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	// Mapas base
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
+	var satelite = L.tileLayer.provider('Esri.WorldImagery');
 
   // Camada
 	var geojson = L.geoJson(statesData, {
@@ -104,12 +107,14 @@
 	var map = L.map('map', {
 		center: [37.8, -96],
 		zoom: 4,
-		layers: [basemap, geojson]
+		layers: [osm, geojson]
 	});
 
   // Lista de camadas base e camadas gerais
 	var baseLayers = {
-		"Streets": basemap
+		"Ruas": osm,
+		"Aquarela": aquarela,
+		"Imagem de satélite": satelite
 	};
 	var overlays = {
 		"Bairros": geojson
