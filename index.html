@@ -62,6 +62,10 @@
 	}
 
 	function highlightFeature(e) {
+		// Reset style on entire layer
+		geojson.resetStyle();
+		info.update();
+		
 		var layer = e.target;
 
 		layer.setStyle({
@@ -78,15 +82,9 @@
 		info.update(layer.feature.properties);
 	}
 
-	function resetHighlight(e) {
-		geojson.resetStyle(e.target);
-		info.update();
-	}
-
 	function onEachFeature(feature, layer) {
 		layer.on({
-			mousedown: highlightFeature,
-			mouseout: resetHighlight
+			click: highlightFeature
 		});
 	}
 
