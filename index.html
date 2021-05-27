@@ -87,31 +87,33 @@
 			click: highlightFeature
 		});
 	}
-
+	
+	// Mapa base
 	var basemap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
+  // Camada
 	var geojson = L.geoJson(statesData, {
 		style: style,
 		onEachFeature: onEachFeature
 	});
-
+  
+  // Cria mapa
 	var map = L.map('map', {
 		center: [37.8, -96],
 		zoom: 4,
 		layers: [basemap, geojson]
 	});
 
+  // Lista de camadas base e camadas gerais
 	var baseLayers = {
 		"Streets": basemap
 	};
-
 	var overlays = {
 		"Bairros": geojson
 	};
 
+  // Adiciona controle de camadas ao mapa
 	L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
-
-	var legend = L.control({position: 'bottomright'});
 
 	// control that shows state info on hover
 	var info = L.control();
@@ -130,6 +132,9 @@
 
 	info.addTo(map);	
 
+  // Cria legenda
+	var legend = L.control({position: 'bottomright'});
+	
 	legend.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
