@@ -96,6 +96,8 @@
 	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
 	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+	var luzes_noturnas = L.tileLayer.provider('NASAGIBS.ViirsEarthAtNight2012');
+	var relevo = L.tileLayer.provider('Esri.WorldPhysical');
 
   // Camada
 	var geojson = L.geoJson(statesData, {
@@ -114,7 +116,9 @@
 	var baseLayers = {
 		"Ruas": osm,
 		"Aquarela": aquarela,
-		"Imagem de satélite": satelite
+		"Imagem de satélite": satelite,
+		"Luzes noturnas": luzes_noturnas,
+		"Relevo": relevo
 	};
 	var overlays = {
 		"Bairros": geojson
