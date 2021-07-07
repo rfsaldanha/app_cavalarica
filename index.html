@@ -35,7 +35,7 @@
 
 <div id='map'></div>
 
-<script type="text/javascript" src="data/us-states.js"></script>
+<script type="text/javascript" src="data/rj_banco.js"></script>
 
 <script type="text/javascript">
 
@@ -61,7 +61,7 @@
 			color: 'white',
 			dashArray: '3',
 			fillOpacity: 0.7,
-			fillColor: getColor(feature.properties.density)
+			fillColor: getColor(feature.properties.DEN16)
 		};
 	}
 
@@ -100,15 +100,15 @@
 	var relevo = L.tileLayer.provider('Esri.WorldPhysical');
 
   // Camada
-	var geojson = L.geoJson(statesData, {
+	var geojson = L.geoJson(rj_banco, {
 		style: style,
 		onEachFeature: onEachFeature
 	});
   
   // Cria mapa
 	var map = L.map('map', {
-		center: [37.8, -96],
-		zoom: 4,
+		center: [-22.9133, -43.4195],
+		zoom: 11,
 		layers: [osm, geojson]
 	});
 
@@ -138,7 +138,7 @@
 
 	info.update = function (props) {
 		this._div.innerHTML = '<h4>Rio de Janeiro - RJ</h4>' +  (props ?
-			'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+			'<b>' + props.FIRST_NM_B + '</b><br />' + props.DEN16 + ' casos de dengue em 2016'
 			: 'Clique em um dos bairros');
 	};
 
