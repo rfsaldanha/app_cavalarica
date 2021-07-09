@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="leaflet/leaflet.css"/>
     <script src="leaflet/leaflet.js"></script>
     <script src="js/leaflet-providers.js"></script>
+    <script src="js/leaflet-timeline-slider.min.js"></script>
 
 
 	<style>
@@ -41,108 +42,276 @@
 
   // Lembrete do link de dev
   // https://rfsaldanha.github.io/app_cavalarica/
+  
+  //Pop up
+  function forEachFeature(feature, layer, year) {
+      var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
+      '</p>';
+      layer.bindPopup(popupContent);
+  }
 
-	// get color depending on population density value
-	function getColor(d) {
-		return d > 1000 ? '#800026' :
-				d > 500  ? '#BD0026' :
-				d > 200  ? '#E31A1C' :
-				d > 100  ? '#FC4E2A' :
-				d > 50   ? '#FD8D3C' :
-				d > 20   ? '#FEB24C' :
-				d > 10   ? '#FED976' :
+	// Paleta de cores para DENGUE
+	function getColor_dengue(d) {
+		return d > 2000 ? '#800026' :
+				d > 1000  ? '#BD0026' :
+				d > 500  ? '#E31A1C' :
+				d > 300  ? '#FC4E2A' :
+				d > 200   ? '#FD8D3C' :
+				d > 100   ? '#FEB24C' :
+				d > 50   ? '#FED976' :
 							'#FFEDA0';
 	}
-
-	function style(feature) {
+	
+  // Estilo para DENGUE
+	function style_dengue_20(feature) {
 		return {
 			weight: 2,
 			opacity: 1,
 			color: 'white',
 			dashArray: '3',
 			fillOpacity: 0.7,
-			fillColor: getColor(feature.properties.DEN16)
+			fillColor: getColor_dengue(feature.properties.TXDEN20)
 		};
 	}
-
-	function highlightFeature(e) {
-		// Reset style on entire layer
-		geojson.resetStyle();
-		info.update();
-		
-		var layer = e.target;
-
-		layer.setStyle({
-			weight: 5,
-			color: '#666',
-			dashArray: '',
-			fillOpacity: 0.7
-		});
-
-		if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-			layer.bringToFront();
-		}
-
-		info.update(layer.feature.properties);
+	
+	function style_dengue_19(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN19)
+		};
 	}
-
-	function onEachFeature(feature, layer) {
-		layer.on({
-			click: highlightFeature
-		});
+	
+	function style_dengue_18(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN18)
+		};
+	}
+	
+	function style_dengue_16(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN16)
+		};
+	}
+	
+	function style_dengue_15(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN15)
+		};
+	}
+	
+	function style_dengue_14(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN14)
+		};
+	}
+	
+	function style_dengue_13(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN13)
+		};
+	}
+	
+	function style_dengue_12(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN12)
+		};
+	}
+	
+	function style_dengue_11(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN11)
+		};
+	}
+	
+	function style_dengue_10(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_dengue(feature.properties.TXDEN10)
+		};
 	}
 	
 	// Mapas base
 	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
 	var satelite = L.tileLayer.provider('Esri.WorldImagery');
-	var luzes_noturnas = L.tileLayer.provider('NASAGIBS.ViirsEarthAtNight2012');
-	var relevo = L.tileLayer.provider('Esri.WorldPhysical');
 
-  // Camada
-	var geojson = L.geoJson(rj_banco, {
-		style: style,
-		onEachFeature: onEachFeature
+  // Camadas DENGUE
+	var camada_dengue_2020 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_20
+	});
+	
+	var camada_dengue_2019 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_dengue_19
+	});
+	
+	var camada_dengue_2018 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_dengue_18
+	});
+	
+	var camada_dengue_2016 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_16
+	});
+	
+	var camada_dengue_2015 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_15
+	});
+	
+	var camada_dengue_2014 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_14
+	});
+	
+	var camada_dengue_2013 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_13
+	});
+	
+	var camada_dengue_2012 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_12
+	});
+	
+	var camada_dengue_2011 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_11
+	});
+	
+	var camada_dengue_2010 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_dengue_10
 	});
   
   // Cria mapa
 	var map = L.map('map', {
 		center: [-22.9133, -43.4195],
 		zoom: 11,
-		layers: [osm, geojson]
+		layers: [osm]
 	});
 
   // Lista de camadas base e camadas gerais
 	var baseLayers = {
 		"Ruas": osm,
 		"Aquarela": aquarela,
-		"Imagem de satélite": satelite,
-		"Luzes noturnas": luzes_noturnas,
-		"Relevo": relevo
+		"Imagem de satélite": satelite
 	};
-	var overlays = {
-		"Bairros": geojson
-	};
+	var overlays = {};
 
   // Adiciona controle de camadas ao mapa
-	L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
-
-	// control that shows state info on hover
-	var info = L.control();
-
-	info.onAdd = function (map) {
-		this._div = L.DomUtil.create('div', 'info');
-		this.update();
-		return this._div;
+	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
+	
+	// Função para alterar a camada
+	altera_camara = function( {label, value, map, exclamation} ) {
+	  // Remove todas as camadas
+      map.removeLayer(camada_dengue_2010);
+      map.removeLayer(camada_dengue_2011);
+      map.removeLayer(camada_dengue_2012);
+      map.removeLayer(camada_dengue_2013);
+      map.removeLayer(camada_dengue_2014);
+      map.removeLayer(camada_dengue_2015);
+      map.removeLayer(camada_dengue_2016);
+      map.removeLayer(camada_dengue_2018);
+      map.removeLayer(camada_dengue_2019);
+      map.removeLayer(camada_dengue_2020);
+      
+    // Adicionar camada conforme timeline
+    if(label == "2010"){
+      map.addLayer(camada_dengue_2010);
+    }
+    
+    if(label == "2011"){
+      map.addLayer(camada_dengue_2011);
+    }
+    
+    if(label == "2012"){
+      map.addLayer(camada_dengue_2012);
+    }
+    
+    if(label == "2013"){
+      map.addLayer(camada_dengue_2013);
+    }
+    
+    if(label == "2014"){
+      map.addLayer(camada_dengue_2014);
+    }
+    
+    if(label == "2015"){
+      map.addLayer(camada_dengue_2015);
+    }
+    
+    if(label == "2016"){
+      map.addLayer(camada_dengue_2016);
+    }
+    
+    if(label == "2018"){
+      map.addLayer(camada_dengue_2018);
+    }
+    
+    if(label == "2019"){
+      map.addLayer(camada_dengue_2019);
+    }
+    
+    if(label == "2020"){
+      map.addLayer(camada_dengue_2020);
+    }
+    
 	};
-
-	info.update = function (props) {
-		this._div.innerHTML = '<h4>Rio de Janeiro - RJ</h4>' +  (props ?
-			'<b>' + props.FIRST_NM_B + '</b><br />' + props.DEN16 + ' casos de dengue em 2016'
-			: 'Clique em um dos bairros');
-	};
-
-	info.addTo(map);	
+	
+	
+	// Adiciona timeline
+	L.control.timelineSlider({
+	              position: "bottomleft",
+                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2018", "2019", "2020"],
+                extraChangeMapParams: {greeting: "Hello World!"}, 
+                changeMap: altera_camara })
+            .addTo(map);
 
   // Cria legenda
 	var legend = L.control({position: 'bottomright'});
@@ -151,7 +320,7 @@
 
 		var div = L.DomUtil.create('div', 'info legend'),
 			grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-			labels = [],
+			labels = ['Taxa por 100.000 hab'],
 			from, to;
 
 		for (var i = 0; i < grades.length; i++) {
@@ -159,7 +328,7 @@
 			to = grades[i + 1];
 
 			labels.push(
-				'<i style="background:' + getColor(from + 1) + '"></i> ' +
+				'<i style="background:' + getColor_dengue(from + 1) + '"></i> ' +
 				from + (to ? '&ndash;' + to : '+'));
 		}
 
@@ -168,6 +337,7 @@
 	};
 
 	legend.addTo(map);
+	
 </script>
 
 
