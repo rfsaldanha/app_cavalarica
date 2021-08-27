@@ -1,347 +1,200 @@
-<!DOCTYPE html>
-<html>
-<head>
-	
-	<title>Rio de Janeiro - RJ</title>
-
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
-
-    <link rel="stylesheet" href="leaflet/leaflet.css"/>
-    <script src="leaflet/leaflet.js"></script>
-    <script src="js/leaflet-providers.js"></script>
-    <script src="js/leaflet-timeline-slider.min.js"></script>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Fiocruz - ICICT - LIS">
+    <title>Saúde</title>
 
 
-	<style>
-		html, body {
-			height: 100%;
-			margin: 0;
-		}
-		#map {
-			width: 600px;
-			height: 400px;
-		}
-	</style>
+    
 
-	<style>
-		body { padding: 0; margin: 0; } #map { height: 100%; width: 100vw; }
-		.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
-		.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
-	</style>
-</head>
-<body>
+    <!-- Bootstrap core CSS -->
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<div id='map'></div>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
 
-<script type="text/javascript" src="data/rj_banco.js"></script>
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
 
-<script type="text/javascript">
+    
+  </head>
+  <body>
+    
+<header>
+  <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+          <h4 class="text-white">Sobre</h4>
+          <p class="text-muted">Escrever sobre este projeto...</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+          <h4 class="text-white">Contato</h4>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white">Formas de contato</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-dark bg-dark shadow-sm">
+    <div class="container">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <strong>Saúde no RJ</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
 
-  // Lembrete do link de dev
-  // https://rfsaldanha.github.io/app_cavalarica/
-  
-  //Pop up
-  function forEachFeature(feature, layer, year) {
-      var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
-      '</p>';
-      layer.bindPopup(popupContent);
-  }
+<main>
 
-	// Paleta de cores para DENGUE
-	function getColor_dengue(d) {
-		return d > 2000 ? '#800026' :
-				d > 1000  ? '#BD0026' :
-				d > 500  ? '#E31A1C' :
-				d > 300  ? '#FC4E2A' :
-				d > 200   ? '#FD8D3C' :
-				d > 100   ? '#FEB24C' :
-				d > 50   ? '#FED976' :
-							'#FFEDA0';
-	}
-	
-  // Estilo para DENGUE
-	function style_dengue_20(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN20)
-		};
-	}
-	
-	function style_dengue_19(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN19)
-		};
-	}
-	
-	function style_dengue_18(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN18)
-		};
-	}
-	
-	function style_dengue_16(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN16)
-		};
-	}
-	
-	function style_dengue_15(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN15)
-		};
-	}
-	
-	function style_dengue_14(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN14)
-		};
-	}
-	
-	function style_dengue_13(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN13)
-		};
-	}
-	
-	function style_dengue_12(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN12)
-		};
-	}
-	
-	function style_dengue_11(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN11)
-		};
-	}
-	
-	function style_dengue_10(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_dengue(feature.properties.TXDEN10)
-		};
-	}
-	
-	// Mapas base
-	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
-	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Saúde no RJ</h1>
+        <p class="lead text-muted">Texto curto sobre a exposição...</p>
+      </div>
+    </div>
+  </section>
 
-  // Camadas DENGUE
-	var camada_dengue_2020 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_20
-	});
-	
-	var camada_dengue_2019 = L.geoJson(rj_banco, {
-		onEachFeature: forEachFeature,
-		style: style_dengue_19
-	});
-	
-	var camada_dengue_2018 = L.geoJson(rj_banco, {
-		onEachFeature: forEachFeature,
-		style: style_dengue_18
-	});
-	
-	var camada_dengue_2016 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_16
-	});
-	
-	var camada_dengue_2015 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_15
-	});
-	
-	var camada_dengue_2014 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_14
-	});
-	
-	var camada_dengue_2013 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_13
-	});
-	
-	var camada_dengue_2012 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_12
-	});
-	
-	var camada_dengue_2011 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_11
-	});
-	
-	var camada_dengue_2010 = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_dengue_10
-	});
-  
-  // Cria mapa
-	var map = L.map('map', {
-		center: [-22.9133, -43.4195],
-		zoom: 11,
-		layers: [osm]
-	});
+  <div class="album py-5 bg-light">
+    <div class="container">
 
-  // Lista de camadas base e camadas gerais
-	var baseLayers = {
-		"Ruas": osm,
-		"Aquarela": aquarela,
-		"Imagem de satélite": satelite
-	};
-	var overlays = {};
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
 
-  // Adiciona controle de camadas ao mapa
-	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
-	
-	// Função para alterar a camada
-	altera_camara = function( {label, value, map, exclamation} ) {
-	  // Remove todas as camadas
-      map.removeLayer(camada_dengue_2010);
-      map.removeLayer(camada_dengue_2011);
-      map.removeLayer(camada_dengue_2012);
-      map.removeLayer(camada_dengue_2013);
-      map.removeLayer(camada_dengue_2014);
-      map.removeLayer(camada_dengue_2015);
-      map.removeLayer(camada_dengue_2016);
-      map.removeLayer(camada_dengue_2018);
-      map.removeLayer(camada_dengue_2019);
-      map.removeLayer(camada_dengue_2020);
+            <div class="card-body">
+              <p class="card-text">Dengue no tempo</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+            <div class="card-body">
+              <p class="card-text">Hanseníase no tempo</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+            <div class="card-body">
+              <p class="card-text">Hepatite A no tempo</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+            <div class="card-body">
+              <p class="card-text">Hepatites virais no tempo.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+            <div class="card-body">
+              <p class="card-text">Leptospirose no tempo</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+            <div class="card-body">
+              <p class="card-text">Tuberculose no tempo</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
+            <div class="card-body">
+              <p class="card-text">Violência no tempo</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+</main>
+
+<footer class="text-muted py-5">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Voltar ao início</a>
+    </p>
+    <p class="mb-1">Fiocruz - ICICT - LIS</p>
+    <p class="mb-0">Mais algum texto...</p>
+  </div>
+</footer>
+
+
+    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+
       
-    // Adicionar camada conforme timeline
-    if(label == "2010"){
-      map.addLayer(camada_dengue_2010);
-    }
-    
-    if(label == "2011"){
-      map.addLayer(camada_dengue_2011);
-    }
-    
-    if(label == "2012"){
-      map.addLayer(camada_dengue_2012);
-    }
-    
-    if(label == "2013"){
-      map.addLayer(camada_dengue_2013);
-    }
-    
-    if(label == "2014"){
-      map.addLayer(camada_dengue_2014);
-    }
-    
-    if(label == "2015"){
-      map.addLayer(camada_dengue_2015);
-    }
-    
-    if(label == "2016"){
-      map.addLayer(camada_dengue_2016);
-    }
-    
-    if(label == "2018"){
-      map.addLayer(camada_dengue_2018);
-    }
-    
-    if(label == "2019"){
-      map.addLayer(camada_dengue_2019);
-    }
-    
-    if(label == "2020"){
-      map.addLayer(camada_dengue_2020);
-    }
-    
-	};
-	
-	
-	// Adiciona timeline
-	L.control.timelineSlider({
-	              position: "bottomleft",
-                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2018", "2019", "2020"],
-                extraChangeMapParams: {greeting: "Hello World!"}, 
-                changeMap: altera_camara })
-            .addTo(map);
-
-  // Cria legenda
-	var legend = L.control({position: 'bottomright'});
-	
-	legend.onAdd = function (map) {
-
-		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-			labels = ['Taxa por 100.000 hab'],
-			from, to;
-
-		for (var i = 0; i < grades.length; i++) {
-			from = grades[i];
-			to = grades[i + 1];
-
-			labels.push(
-				'<i style="background:' + getColor_dengue(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
-		}
-
-		div.innerHTML = labels.join('<br>');
-		return div;
-	};
-
-	legend.addTo(map);
-	
-</script>
-
-
-
-</body>
+  </body>
 </html>
-
