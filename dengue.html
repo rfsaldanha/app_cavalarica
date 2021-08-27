@@ -28,10 +28,15 @@
           font-size: 3.5rem;
         }
       }
-		
-		#map {
-			height: 80vh;
-		}
+      
+  		html, body {
+  			height: 100%;
+  			margin: 0;
+  		}
+  		
+  		#map {
+  			height: 100%;
+  		}
 		
       
       .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
@@ -41,32 +46,38 @@
     
   </head>
   <body>
-    
-<header>
-  <div class="navbar navbar-dark fixed-top bg-dark shadow-sm">
-    <div class="container">
-      <a href="index.html" class="navbar-brand d-flex align-items-center">
-        <strong>Saúde no RJ</strong>
-      </a>
-      <a href="index.html" class="btn btn-sm btn-secondary">Voltar</a>
+
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="col-12">
+      <div class="h-100 d-flex flex-column">
+        <div class="row">
+          <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container">
+              <a href="index.html" class="navbar-brand d-flex align-items-center">
+                <strong>Saúde no RJ</strong>
+              </a>
+              <a href="index.html" class="btn btn-sm btn-secondary">Voltar</a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <main>
+            <section class="pt-2 text-left container">
+              <div class="row pt-lg-2">
+                <h3>Dengue</h3>
+                <p>Texto sobre o indicador...</p>
+              </div>
+            </section>
+          </main>
+        </div>
+        <div class="row justify-content-center flex-grow-1">
+          <div id="map"></div>
+        </div>
+      </div>
     </div>
   </div>
-</header>
-
-<main>
-
-  <section class="pt-3 text-left container">
-    <div class="row pt-lg-5">
-      <h3>Dengue</h3>
-      <p>Texto sobre o indicador...</p>
-    </div>
-  </section>
-  
-  <section class="container-fluid">
-    <div class="row" id="map"></div>
-  </section> 
-
-</main>
+</div>
 
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="leaflet/leaflet.js"></script>
