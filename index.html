@@ -12,8 +12,37 @@
 
     <!-- Bootstrap core CSS -->
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
 
     <style>
+      .bg-custom {
+        background-color: #3B7D67;
+      }
+      
+      .text-custom {
+        color: #3B7D67;
+      }
+      
+      .btn-custom {
+        color: #fff;
+        background-color: #3B7D67;
+        border-color: #3B7D67;
+      }
+      
+      body {
+        font-family: 'Barlow', sans-serif;
+      }
+      
+      h1,h2,h3,h4,h5,h6 {
+          font-family: 'Barlow', sans-serif;
+      }
+      p {
+          font-family: 'Barlow', sans-serif;
+      }      
+    
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -34,12 +63,12 @@
   <body>
     
 <header>
-  <div class="collapse bg-dark" id="navbarHeader">
+  <div class="collapse bg-custom" id="navbarHeader">
     <div class="container">
       <div class="row">
         <div class="col-sm-8 col-md-7 py-4">
           <h4 class="text-white">Sobre</h4>
-          <p class="text-muted">Escrever sobre este projeto...</p>
+          <p class="text-white">Escrever sobre este projeto...</p>
         </div>
         <div class="col-sm-4 offset-md-1 py-4">
           <h4 class="text-white">Contato</h4>
@@ -50,7 +79,7 @@
       </div>
     </div>
   </div>
-  <div class="navbar navbar-dark bg-dark shadow-sm">
+  <div class="navbar navbar-dark bg-custom shadow-sm">
     <div class="container">
       <a href="#" class="navbar-brand d-flex align-items-center">
         <strong>Onde estão nossas doenças?</strong>
@@ -67,7 +96,7 @@
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Onde estão nossas doenças?</h1>
+        <h1 class="fw-light text-custom">Onde estão nossas doenças?</h1>
         <p class="lead text-muted">Texto curto sobre a exposição, texto curto sobre a exposição, texto curto sobre a exposição, texto curto sobre a exposição, texto curto sobre a exposição, texto curto sobre a exposição, texto curto sobre a exposição, texto curto sobre a exposição, texto curto sobre a exposição...</p>
       </div>
     </div>
@@ -81,10 +110,10 @@
           <div class="card shadow-sm">
             <img src="img/dengue.jpg" alt="Dengue" width="300" height="225">
             <div class="card-body">
-              <p class="card-text">Dengue no tempo</p>
+              <p class="card-text">Dengue</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="dengue.html" class="btn btn-sm btn-outline-secondary">Abrir</a>
+                  <a href="dengue.html" class="btn btn-sm btn-custom">Abrir</a>
                 </div>
               </div>
             </div>
@@ -94,10 +123,10 @@
           <div class="card shadow-sm">
           <img src="img/hans.jpg" alt="Hanseníase" width="300" height="225">
             <div class="card-body">
-              <p class="card-text">Hanseníase no tempo</p>
+              <p class="card-text">Hanseníase</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="hanseniase.html" class="btn btn-sm btn-outline-secondary">Abrir</a>
+                  <a href="hanseniase.html" class="btn btn-sm btn-custom">Abrir</a>
                 </div>
               </div>
             </div>
@@ -107,10 +136,10 @@
           <div class="card shadow-sm">
             <img src="img/hepatite_a.jpg" alt="Hepatite A" width="300" height="225">
             <div class="card-body">
-              <p class="card-text">Hepatite A no tempo</p>
+              <p class="card-text">Hepatite A</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="hepa.html" class="btn btn-sm btn-outline-secondary">Abrir</a>
+                  <a href="hepa.html" class="btn btn-sm btn-custom">Abrir</a>
                 </div>
               </div>
             </div>
@@ -121,10 +150,10 @@
           <div class="card shadow-sm">
             <img src="img/hepatite_alcohol.jpg" alt="Hepatites virais" width="300" height="225">
             <div class="card-body">
-              <p class="card-text">Hepatites virais no tempo.</p>
+              <p class="card-text">Hepatites virais.</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="hepv.html" class="btn btn-sm btn-outline-secondary">Abrir</a>
+                  <a href="hepv.html" class="btn btn-sm btn-custom">Abrir</a>
                 </div>
               </div>
             </div>
@@ -134,10 +163,10 @@
           <div class="card shadow-sm">
             <img src="img/lepto.jpg" alt="Leptospirose" width="300" height="225">
             <div class="card-body">
-              <p class="card-text">Leptospirose no tempo</p>
+              <p class="card-text">Leptospirose</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a href="lepto.html" class="btn btn-sm btn-outline-secondary">Abrir</a>
+                  <a href="lepto.html" class="btn btn-sm btn-custom">Abrir</a>
                 </div>
               </div>
             </div>
@@ -147,10 +176,10 @@
           <div class="card shadow-sm">
             <img src="img/tuber.jpg" alt="Tuberculose" width="300" height="225">
             <div class="card-body">
-              <p class="card-text">Tuberculose no tempo</p>
+              <p class="card-text">Tuberculose</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                  <button type="button" class="btn btn-sm btn-custom">Abrir</button>
                 </div>
               </div>
             </div>
@@ -161,10 +190,10 @@
           <div class="card shadow-sm">
             <img src="img/viol.jpg" alt="Violência" width="300" height="225">
             <div class="card-body">
-              <p class="card-text">Violência no tempo</p>
+              <p class="card-text">Violência</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Abrir</button>
+                  <button type="button" class="btn btn-sm btn-custom">Abrir</button>
                 </div>
               </div>
             </div>
