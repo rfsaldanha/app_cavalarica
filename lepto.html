@@ -58,24 +58,31 @@
     <div class="col-12">
       <div class="h-100 d-flex flex-column">
         <div class="row">
-          <div class="navbar navbar-dark bg-custom shadow-sm">
+          <div class="collapse bg-custom" id="navbarHeader">
             <div class="container">
-              <a href="index.html" class="navbar-brand d-flex align-items-center">
-                <strong>Onde estão nossas doenças?</strong>
-              </a>
-              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+              <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                  <h4 class="text-white">Saiba mais</h4>
+                  <p class="text-white">Leptospirose é uma doença infecciosa febril de origem bacteriana e que afeta seres humanos e animais. É causada por bactérias do gênero Leptospira. A infecção humana resulta da exposição direta ou indireta à urina de animais infectados. A penetração do microrganismo ocorre através da pele com presença de lesões, da pele íntegra imersa por longos períodos em água contaminada ou através de mucosas. O contato com água e lama contaminadas demonstra a importância do elo hídrico na transmissão da doença ao homem. Chuvas intensas associadas a condições de habitação precárias, falhas no sistema de coleta de lixo, sistemas urbanos de saneamento e drenagem inadequados nas cidades configuram risco de adoecimento devido inundação de áreas e exposição da população ao agente etiológico.</p>
+                  </div>
+                  <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Sintomas</h4>
+                    <ul class="list-unstyled">
+                      <li class="text-white">Alguns sintomas são febre alta, dor de cabeça, sangramento, dor muscular, calafrios, olhos vermelhos e vômitos.</li>
+                    </ul>
+                  </div>
+                </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <main>
-            <section class="pt-2 text-left container">
-              <div class="row pt-lg-2">
-                <h3>Leptospirose</h3>
-                <p>Leptospirose é uma doença infecciosa febril de origem bacteriana e que afeta seres humanos e animais. É causada por bactérias do gênero Leptospira. A infecção humana resulta da exposição direta ou indireta à urina de animais infectados. A penetração do microrganismo ocorre através da pele com presença de lesões, da pele íntegra imersa por longos períodos em água contaminada ou através de mucosas. O contato com água e lama contaminadas demonstra a importância do elo hídrico na transmissão da doença ao homem. Chuvas intensas associadas a condições de habitação precárias, falhas no sistema de coleta de lixo, sistemas urbanos de saneamento e drenagem inadequados nas cidades configuram risco de adoecimento devido inundação de áreas e exposição da população ao agente etiológico. </p>
-              </div>
-            </section>
-          </main>
+          <div class="navbar navbar-dark bg-custom shadow-sm">
+            <div class="container">
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Leptospirose</strong>
+              </a>
+              <a class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Saiba mais</a>
+              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+           </div>
+          </div>
         </div>
         <div class="row justify-content-center flex-grow-1">
           <div id="map"></div>

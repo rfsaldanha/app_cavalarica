@@ -58,24 +58,31 @@
     <div class="col-12">
       <div class="h-100 d-flex flex-column">
         <div class="row">
-          <div class="navbar navbar-dark bg-custom shadow-sm">
+          <div class="collapse bg-custom" id="navbarHeader">
             <div class="container">
-              <a href="index.html" class="navbar-brand d-flex align-items-center">
-                <strong>Onde estão nossas doenças?</strong>
-              </a>
-              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+              <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                  <h4 class="text-white">Saiba mais</h4>
+                  <p class="text-white">A tuberculose (TB) é um problema de saúde prioritário no Brasil, e juntamente com outros 21 países em desenvolvimento, alberga 80% dos casos mundiais da doença. Estima-se que, cerca de um terço da população mundial, esteja infectada com o Mycobacterium tuberculosis, estando sob risco de desenvolver a enfermidade. A tuberculose é transmitida de pessoa a pessoa, principalmente, através do ar. A fala, o espirro e, principalmente, a tosse de um doente de tuberculose pulmonar bacilífera lança no ar gotículas, de tamanhos variados, contendo no seu interior o bacilo. Com o surgimento, em 1981, da síndrome de imunodeficiência adquirida (SIDA/aids), vem-se observando, tanto em países desenvolvidos como nos países em desenvolvimento, um crescente número de casos notificados de tuberculose, em pessoas infectadas pelo vírus da imunodeficiência humana (HIV). A associação (HIV/TB) constitui, nos dias atuais, um sério problema de saúde pública, podendo levar ao aumento da morbidade e mortalidade pela TB, em muitos países.</p>
+                  </div>
+                  <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Sintomas</h4>
+                    <ul class="list-unstyled">
+                      <li class="text-white">A maioria das pessoas infectadas com a bactéria que causa a tuberculose não apresenta sintomas. Quando ocorrem, os sintomas geralmente incluem tosse (às vezes, com sangue), perda de peso, sudorese noturna e febre.</li>
+                    </ul>
+                  </div>
+                </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <main>
-            <section class="pt-2 text-left container">
-              <div class="row pt-lg-2">
-                <h3>Tuberculose</h3>
-                <p>A tuberculose (TB) é um problema de saúde prioritário no Brasil, e juntamente com outros 21 países em desenvolvimento, alberga 80% dos casos mundiais da doença. Estima-se que, cerca de um terço da população mundial, esteja infectada com o Mycobacterium tuberculosis, estando sob risco de desenvolver a enfermidade. A tuberculose é transmitida de pessoa a pessoa, principalmente, através do ar. A fala, o espirro e, principalmente, a tosse de um doente de tuberculose pulmonar bacilífera lança no ar gotículas, de tamanhos variados, contendo no seu interior o bacilo. Com o surgimento, em 1981, da síndrome de imunodeficiência adquirida (SIDA/aids), vem-se observando, tanto em países desenvolvidos como nos países em desenvolvimento, um crescente número de casos notificados de tuberculose, em pessoas infectadas pelo vírus da imunodeficiência humana (HIV). A associação (HIV/TB) constitui, nos dias atuais, um sério problema de saúde pública, podendo levar ao aumento da morbidade e mortalidade pela TB, em muitos países.</p>
-              </div>
-            </section>
-          </main>
+          <div class="navbar navbar-dark bg-custom shadow-sm">
+            <div class="container">
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Tuberculose</strong>
+              </a>
+              <a class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Saiba mais</a>
+              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+           </div>
+          </div>
         </div>
         <div class="row justify-content-center flex-grow-1">
           <div id="map"></div>
