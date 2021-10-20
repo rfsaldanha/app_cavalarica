@@ -59,21 +59,23 @@
           <div class="collapse bg-custom" id="navbarHeader">
             <div class="container">
               <div class="row">
-                <div class="col-md-4 py-4">
+                <div class="col-md-6 py-4">
                   <h3 class="text-white">IDS</h3>
-                  <p class="text-white">O IDS (Índice de Desenvolvimento Social) é construído a partir de variáveis do Censo Demográfico que contemplam dados de saneamento, habitação, escolaridade e renda. Esse índice busca caracterizar situações relativas tanto ao domicílio quanto às pessoas que o habitam.</p>
+                  <p class="text-white">O Índice de Desenvolvimento Social é construído a partir de variáveis do Censo Demográfico que contemplam dados de saneamento, habitação, escolaridade e renda. Esse índice busca caracterizar situações relativas tanto ao domicílio quanto às pessoas que o habitam.</p>
                   <h3 class="text-white">Água</h3>
                   <p class="text-white">Percentual de domicílios com fornecimento de água potável por rede de distribuição ou por poço, nascente ou cisterna, com canalização interna, em qualquer caso sem intermitências (paralisações ou interrupções) em relação ao total de domicílios.</p>
                   <h3 class="text-white">Esgoto</h3>
                   <p class="text-white">Percentual de domicílios com com coleta de esgotos, seguida de tratamento ou uso de fossa séptica em relação ao total de domicílios.</p>
                   </div>
-                  <div class="col-md-4 py-4">
-                    <h3 class="text-white">AAA</h3>
-                    <p class="text-white">Aaa.</p>
-                  </div>
-                  <div class="col-md-4 py-4">
-                    <h3 class="text-white">BBB</h3>
-                    <p class="text-white">Bbb.</p>
+                  <div class="col-md-6 py-4">
+                    <h3 class="text-white">Lixo</h3>
+                    <p class="text-white">Percentual de domicílios atendidos, direta ou indiretamente, por serviço regular de coleta de lixo domiciliar em relação ao total de domicílios.</p>
+                    <h3 class="text-white">Analfabetismo</h3>
+                    <p class="text-white"> Número de pessoas analfabetas entre 10 e a14 anos em relação ao total da população de 10 a 14 anos.</p>
+                    <h3 class="text-white">Renda até 1SM</h3>
+                    <p class="text-white">Percentual de domicílios em que a renda por habitantes atinge até um salário mínimo, indica o nível econômico de uma determinada população.</p>
+                    <h3 class="text-white">Renda superior 5SM</h3>
+                    <p class="text-white">Percentual de domicílios em que a renda por habitantes é superior a cinco salários mínimos, indica o nível econômico de uma determinada população.</p>
                   </div>
                 </div>
             </div>
@@ -115,95 +117,77 @@
       layer.bindPopup(popupContent);
   }
 
-	// Paleta de cores para DENGUE TOTAL
+	// Paletas de cores
 	function getColor_dengue_tot(d) {
-		return d > 4000  ? '#7f2704' :
-				d > 3000   ? '#df4f05' :
-				d > 2000   ? '#fd9243' :
-				d > 1000   ? '#fed2a6' :
-							'#fff5eb';
+		return d > 789  ? '#bd0026' :
+				d > 615   ? '#e62f21' :
+				d > 522   ? '#f86c30' :
+				d > 413   ? '#fea649' :
+				d > 332   ? '#ffd76d' :
+							'#ffffb2';
 	}
 	
 	function getColor_ids(d) {
-		return d > 0.8  ? '#fde725' :
-				d > 0.7   ? '#8fd744' :
-				d > 0.6   ? '#35b779' :
-				d > 0.5   ? '#20908d' :
-				d > 0.4   ? '#31688e' :
-				d > 0.3   ? '#443a83' :
+		return d > 0.68  ? '#fde725' :
+				d > 0.62   ? '#7ad251' :
+				d > 0.59   ? '#22a884' :
+				d > 0.57   ? '#29788e' :
+				d > 0.55   ? '#404387' :
 							'#440154';
 	}
 	
 	function getColor_abas_agua(d) {
-		return d > 80  ? '#045a8d' :
-				d > 60   ? '#2b8cbe' :
-				d > 40   ? '#74a9cf' :
-				d > 20   ? '#bdc9e1' :
+		return d > 99.88  ? '#045a8d' :
+				d > 99.76   ? '#2382b4' :
+				d > 99.47   ? '#579ec8' :
+				d > 98.99   ? '#91b6d7' :
+				d > 97.77   ? '#c8d1e6' :
 							'#f1eef6';
 	}
 	
 	function getColor_serv_esgoto(d) {
-		return d > 80  ? '#443308' :
-				d > 60   ? '#73663b' :
-				d > 40   ? '#a2996e' :
-				d > 20   ? '#d1cca1' :
+		return d > 99.34  ? '#993404' :
+				d > 98.38   ? '#cc560c' :
+				d > 96.04   ? '#f0821e' :
+				d > 92.16   ? '#feb351' :
+				d > 84.89   ? '#ffe19c' :
 							'#ffffd4';
 	}
 	
 	function getColor_col_lixo(d) {
-		return d > 80  ? '#e8e80b' :
-				d > 60   ? '#eeee3a' :
-				d > 40   ? '#f4f469' :
-				d > 20   ? '#fafa98' :
-							'#ffffc6';
-	}
-	
-	function getColor_analf(d) {
-		return d > 4  ? '#980043' :
-				d > 3   ? '#dd1c77' :
-				d > 2   ? '#df65b0' :
-				d > 1   ? '#d7b5d8' :
-							'#f1eef6';
-	}
-	
-	function getColor_esc_mun(d) {
-		return d > 100  ? '#67000d' :
-				d > 80   ? '#c5161b' :
-				d > 60   ? '#f44d37' :
-				d > 40   ? '#fc8f6f' :
-				d > 20   ? '#fdccb8' :
-							'#fff5f0';
-	}
-	
-	function getColor_esc_est(d) {
-		return d > 25  ? '#7a0177' :
-				d > 20   ? '#b61586' :
-				d > 15   ? '#e34998' :
-				d > 10   ? '#f986ab' :
-				d > 5   ? '#fcbfc1' :
+		return d > 99.99  ? '#7a0177' :
+				d > 99.96   ? '#b61586' :
+				d > 99.81   ? '#e34998' :
+				d > 99.58   ? '#f986ab' :
+				d > 98.63   ? '#fcbfc1' :
 							'#feebe2';
 	}
 	
+	function getColor_analf(d) {
+		return d > 2.73  ? '#016c59' :
+				d > 1.98   ? '#16898c' :
+				d > 1.55   ? '#499fba' :
+				d > 1.13   ? '#89b6d7' :
+				d > 0.83   ? '#c9d1e6' :
+							'#f6eff7';
+	}
+	
 	function getColor_rend_1sm(d) {
-		return d > 80  ? '#993404' :
-				d > 60   ? '#d95f0e' :
-				d > 40   ? '#fe9929' :
-				d > 20   ? '#fed98e' :
-							'#ffffd4';
+		return d > 60.24  ? '#7f2704' :
+				d > 51.40   ? '#d14501' :
+				d > 42.90   ? '#f67722' :
+				d > 34.85   ? '#fdac67' :
+				d > 19.33   ? '#fedbb7' :
+							'#fff5eb';
 	}
 	
 	function getColor_rend_5sm(d) {
-		return d > 60  ? '#3f007d' :
-				d > 40   ? '#7c76b6' :
-				d > 20   ? '#c9cae3' :
-							'#fcfbfd';
-	}
-	
-	function getColor_banheiros(d) {
-		return d > 4  ? '#045a8d' :
-				d > 3   ? '#4396c4' :
-				d > 2   ? '#a5bfdb' :
-							'#f1eef6';
+		return d > 25.14  ? '#253494' :
+				d > 9.81   ? '#2a70b1' :
+				d > 5.90   ? '#38a0bf' :
+				d > 3.28   ? '#67c5be' :
+				d > 1.61   ? '#b4e2b9' :
+							'#ffffcc';
 	}
 	
   // Estilos
@@ -273,28 +257,6 @@
 		};
 	}
 	
-	function style_esc_mun(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_esc_mun(feature.properties.ESC_MUN)
-		};
-	}
-	
-	function style_esc_est(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_esc_est(feature.properties.ESC_EST)
-		};
-	}
-	
 	function style_rend_1sm(feature) {
 		return {
 			weight: 2,
@@ -314,17 +276,6 @@
 			dashArray: '3',
 			fillOpacity: 0.7,
 			fillColor: getColor_rend_5sm(feature.properties.PDSUP5SM)
-		};
-	}
-	
-	function style_banheiros(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_banheiros(feature.properties.N_BANMOR)
 		};
 	}
 	
@@ -365,16 +316,6 @@
 		style: style_analf
 	});
 	
-	var camada_esc_mun = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_esc_mun
-	});
-	
-	var camada_esc_est = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_esc_est
-	});
-	
 	var camada_rend_1sm = L.geoJson(rj_banco, {
 	  onEachFeature: forEachFeature,
 		style: style_rend_1sm
@@ -383,11 +324,6 @@
 	var camada_rend_5sm = L.geoJson(rj_banco, {
 	  onEachFeature: forEachFeature,
 		style: style_rend_5sm
-	});
-	
-	var camada_banheiros = L.geoJson(rj_banco, {
-	  onEachFeature: forEachFeature,
-		style: style_banheiros
 	});
 
   
@@ -414,7 +350,7 @@
 	legend_dengue_tot.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 1000, 2000, 3000, 4000],
+			grades = [0, 332, 413, 522, 615, 789],
 			labels = ['Dengue, taxa por 100.000 hab'],
 			from, to;
 
@@ -424,7 +360,7 @@
 
 			labels.push(
 				'<i style="background:' + getColor_dengue_tot(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				from + (to ? '&ndash;' + to : '&ndash;4767'));
 		}
 
 		div.innerHTML = labels.join('<br>');
@@ -435,7 +371,7 @@
 	legend_ids.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+			grades = [0.28, 0.55, 0.57, 0.59, 0.62, 0.68],
 			labels = ['IDS - Índice de </br> Desenvolvimento Social'],
 			from, to;
 
@@ -444,8 +380,8 @@
 			to = grades[i + 1];
 
 			labels.push(
-				'<i style="background:' + getColor_ids(from + 0.1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				'<i style="background:' + getColor_ids(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;1'));
 		}
 
 		div.innerHTML = labels.join('<br>');
@@ -456,7 +392,7 @@
 	legend_abas_agua.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 20, 40, 60, 80],
+			grades = [9.09, 97.77, 98.99, 99.47, 99.76, 99.88],
 			labels = ['Percentual de domicílios com </br> abastecimento de água adequado'],
 			from, to;
 
@@ -465,8 +401,8 @@
 			to = grades[i + 1];
 
 			labels.push(
-				'<i style="background:' + getColor_abas_agua(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				'<i style="background:' + getColor_abas_agua(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;100'));
 		}
 
 		div.innerHTML = labels.join('<br>');
@@ -477,7 +413,7 @@
 	legend_serv_esgoto.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 20, 40, 60, 80],
+			grades = [0, 84.89, 92.16, 96.04, 98.38, 99.34],
 			labels = ['Percentual de domicílios com </br> serviço de esgoto adequado'],
 			from, to;
 
@@ -486,8 +422,8 @@
 			to = grades[i + 1];
 
 			labels.push(
-				'<i style="background:' + getColor_serv_esgoto(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				'<i style="background:' + getColor_serv_esgoto(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;99.93'));
 		}
 
 		div.innerHTML = labels.join('<br>');
@@ -498,7 +434,7 @@
 	legend_col_lixo.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 20, 40, 60, 80],
+			grades = [89.17, 98.63, 99.58, 99.81, 99.96, 99.99],
 			labels = ['Percentual de domicílios com </br> coleta de lixo adequada'],
 			from, to;
 
@@ -507,8 +443,8 @@
 			to = grades[i + 1];
 
 			labels.push(
-				'<i style="background:' + getColor_col_lixo(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				'<i style="background:' + getColor_col_lixo(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;100'));
 		}
 
 		div.innerHTML = labels.join('<br>');
@@ -519,7 +455,7 @@
 	legend_analf.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 1, 2, 3, 4],
+			grades = [0, 0.83, 1.13, 1.55, 1.98, 2.73],
 			labels = ['Percentual de analfabetismo de </br> 10 a 14 anos'],
 			from, to;
 
@@ -529,49 +465,7 @@
 
 			labels.push(
 				'<i style="background:' + getColor_analf(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
-		}
-
-		div.innerHTML = labels.join('<br>');
-		return div;
-	};
-	
-	var legend_esc_mun = L.control({position: 'bottomright'});
-	legend_esc_mun.onAdd = function (map) {
-
-		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 20, 40, 60, 80, 100],
-			labels = ['Número de escolas municipais'],
-			from, to;
-
-		for (var i = 0; i < grades.length; i++) {
-			from = grades[i];
-			to = grades[i + 1];
-
-			labels.push(
-				'<i style="background:' + getColor_esc_mun(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
-		}
-
-		div.innerHTML = labels.join('<br>');
-		return div;
-	};
-	
-	var legend_esc_est = L.control({position: 'bottomright'});
-	legend_esc_est.onAdd = function (map) {
-
-		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 5, 10, 15, 20, 25],
-			labels = ['Número de escolas estaduais'],
-			from, to;
-
-		for (var i = 0; i < grades.length; i++) {
-			from = grades[i];
-			to = grades[i + 1];
-
-			labels.push(
-				'<i style="background:' + getColor_esc_est(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				from + (to ? '&ndash;' + to : '&ndash;4,9'));
 		}
 
 		div.innerHTML = labels.join('<br>');
@@ -582,7 +476,7 @@
 	legend_rend_1sm.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 20, 40, 60, 80],
+			grades = [5.07, 19.33, 34.85, 42.90, 51.40, 60.24],
 			labels = ['Percentual dos domicílios com rendimento domiciliar </br> per capita de até um salário mínimo'],
 			from, to;
 
@@ -592,7 +486,7 @@
 
 			labels.push(
 				'<i style="background:' + getColor_rend_1sm(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				from + (to ? '&ndash;' + to : '&ndash;100'));
 		}
 
 		div.innerHTML = labels.join('<br>');
@@ -603,7 +497,7 @@
 	legend_rend_5sm.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 20, 40, 60],
+			grades = [0, 1.61, 3.28, 5.90, 9.81, 25.14],
 			labels = ['Percentual dos domicílios com rendimento domiciliar </br> per capita superior a 5 salários mínimos'],
 			from, to;
 
@@ -613,34 +507,13 @@
 
 			labels.push(
 				'<i style="background:' + getColor_rend_5sm(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
+				from + (to ? '&ndash;' + to : '&ndash;76.05'));
 		}
 
 		div.innerHTML = labels.join('<br>');
 		return div;
 	};
-	
-	var legend_banheiros = L.control({position: 'bottomright'});
-	legend_banheiros.onAdd = function (map) {
 
-		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 2, 3, 4],
-			labels = ['Número de banheiros </br> por morador'],
-			from, to;
-
-		for (var i = 0; i < grades.length; i++) {
-			from = grades[i];
-			to = grades[i + 1];
-
-			labels.push(
-				'<i style="background:' + getColor_banheiros(from + 1) + '"></i> ' +
-				from + (to ? '&ndash;' + to : '+'));
-		}
-
-		div.innerHTML = labels.join('<br>');
-		return div;
-	};
-	
 	// Função para alterar a camada
 	altera_camara = function( {label, value, map, exclamation} ) {
 	  // Remove todas as camadas
@@ -656,16 +529,10 @@
       map.removeControl(legend_col_lixo);
       map.removeLayer(camada_analf);
       map.removeControl(legend_analf);
-      map.removeLayer(camada_esc_mun);
-      map.removeControl(legend_esc_mun);
-      map.removeLayer(camada_esc_est);
-      map.removeControl(legend_esc_est);
       map.removeLayer(camada_rend_1sm);
       map.removeControl(legend_rend_1sm);
       map.removeLayer(camada_rend_5sm);
       map.removeControl(legend_rend_5sm);
-      map.removeLayer(camada_banheiros);
-      map.removeControl(legend_banheiros);
       
       
     // Adicionar camada conforme timeline
@@ -694,19 +561,9 @@
       legend_col_lixo.addTo(map);
     }
     
-    if(label == "Analfabetismo"){
+    if(label == "Analfa-betismo"){
       map.addLayer(camada_analf);
       legend_analf.addTo(map);
-    }
-    
-    if(label == "Escolas Municipais"){
-      map.addLayer(camada_esc_mun);
-      legend_esc_mun.addTo(map);
-    }
-    
-    if(label == "Escolas Estaduais"){
-      map.addLayer(camada_esc_est);
-      legend_esc_est.addTo(map);
     }
     
     if(label == "Renda até 1SM"){
@@ -719,18 +576,13 @@
       legend_rend_5sm.addTo(map);
     }
     
-    if(label == "Banheiros"){
-      map.addLayer(camada_banheiros);
-      legend_banheiros.addTo(map);
-    }
-    
 	};
 	
 	
 	// Adiciona timeline
 	L.control.timelineSlider({
 	              position: "bottomleft",
-                timelineItems: ["Dengue", "IDS", "Água", "Esgoto", "Lixo", "Analfabetismo", "Escolas Municipais", "Escolas Estaduais", "Renda até 1SM", "Renda superior 5SM", "Banheiros"],
+                timelineItems: ["Dengue", "IDS", "Água", "Esgoto", "Lixo", "Analfa-betismo", "Renda até 1SM", "Renda superior 5SM"],
                 extraChangeMapParams: {greeting: "Hello World!"}, 
                 changeMap: altera_camara })
             .addTo(map);
