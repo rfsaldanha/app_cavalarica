@@ -113,12 +113,12 @@
 
 	// Paleta de cores para Hanseíanse
 	function getColor_hans(d) {
-		return d > 50  ? '#ff0000' :
-				d > 40  ? '#ff3333' :
-				d > 30   ? '#ff6666' :
-				d > 20   ? '#ff9999' :
-				d > 10   ? '#ffcccc' :
-							'#ffffff';
+		return d > 10  ? '#810f7c' :
+				d > 8  ? '#87489f' :
+				d > 6   ? '#8a7cba' :
+				d > 4   ? '#9cacd2' :
+				d > 2   ? '#bfd6e8' :
+							'#edf8fb';
 	}
 	
   // Estilo para hans
@@ -130,17 +130,6 @@
 			dashArray: '3',
 			fillOpacity: 0.7,
 			fillColor: getColor_hans(feature.properties.TXHANSE20)
-		};
-	}
-	
-	function style_hans_19(feature) {
-		return {
-			weight: 2,
-			opacity: 1,
-			color: 'white',
-			dashArray: '3',
-			fillOpacity: 0.7,
-			fillColor: getColor_hans(feature.properties.TXHANSE19)
 		};
 	}
 	
@@ -254,11 +243,6 @@
 		style: style_hans_20
 	});
 	
-	var camada_hans_2019 = L.geoJson(rj_banco, {
-		onEachFeature: forEachFeature,
-		style: style_hans_19
-	});
-	
 	var camada_hans_2018 = L.geoJson(rj_banco, {
 		onEachFeature: forEachFeature,
 		style: style_hans_18
@@ -334,7 +318,6 @@
       map.removeLayer(camada_hans_2016);
       map.removeLayer(camada_hans_2017);
       map.removeLayer(camada_hans_2018);
-      map.removeLayer(camada_hans_2019);
       map.removeLayer(camada_hans_2020);
       
     // Adicionar camada conforme timeline
@@ -374,10 +357,6 @@
       map.addLayer(camada_hans_2018);
     }
     
-    if(label == "2019"){
-      map.addLayer(camada_hans_2019);
-    }
-    
     if(label == "2020"){
       map.addLayer(camada_hans_2020);
     }
@@ -388,7 +367,7 @@
 	// Adiciona timeline
 	L.control.timelineSlider({
 	              position: "bottomleft",
-                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2017", "2018", "2020"],
                 extraChangeMapParams: {greeting: "Hello World!"}, 
                 changeMap: altera_camara })
             .addTo(map);
@@ -399,7 +378,7 @@
 	legend.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 10, 20, 30, 40, 50],
+			grades = [0, 2, 4, 6, 8, 10],
 			labels = ['Taxa por 100.000 hab'],
 			from, to;
 

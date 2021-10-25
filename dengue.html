@@ -111,11 +111,12 @@
 
 	// Paleta de cores para DENGUE
 	function getColor_dengue(d) {
-		return d > 4000  ? '#7f2704' :
-				d > 3000   ? '#df4f05' :
-				d > 2000   ? '#fd9243' :
-				d > 1000   ? '#fed2a6' :
-							'#fff5eb';
+		return d > 789  ? '#bd0026' :
+				d > 615   ? '#e62f21' :
+				d > 522   ? '#f86c30' :
+				d > 413   ? '#fea649' :
+				d > 332   ? '#ffd76d' :
+							'#ffffb2';
 	}
 	
   // Estilo para DENGUE
@@ -375,8 +376,8 @@
 	legend.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 1000, 2000, 3000, 4000],
-			labels = ['Taxa por 100.000 hab'],
+			grades = [0, 332, 413, 522, 615, 789],
+			labels = ['Dengue, taxa por 100.000 hab'],
 			from, to;
 
 		for (var i = 0; i < grades.length; i++) {

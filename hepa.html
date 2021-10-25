@@ -113,13 +113,12 @@
 
 	// Paleta de cores para Hepatite
 	function getColor_hepa(d) {
-		return d > 120  ? '#3f007d' :
-		    d > 100  ? '#5e3998' :
-				d > 80  ? '#7c76b6' :
-				d > 60   ? '#a3a0cb' :
-				d > 40   ? '#c9cae3' :
-				d > 20   ? '#e9e8f3' :
-							'#fcfbfd';
+		return d > 10  ? '#016c59' :
+				d > 8  ? '#16898c' :
+				d > 6   ? '#499fba' :
+				d > 4   ? '#89b6d7' :
+				d > 2   ? '#c9d1e6' :
+							'#f6eff7';
 	}
 	
   // Estilo para hepa
@@ -400,7 +399,7 @@
 	legend.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 20, 40, 60, 80, 100, 120],
+			grades = [0, 2, 4, 6, 8, 10],
 			labels = ['Taxa por 100.000 hab'],
 			from, to;
 

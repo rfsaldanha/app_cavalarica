@@ -113,9 +113,11 @@
 
 	// Paleta de cores para Hepatite Virais
 	function getColor_hepv(d) {
-		return d > 150   ? '#7a0177' :
-				d > 100   ? '#d63492' :
-				d > 50   ? '#fa9bb1' :
+		return d > 35   ? '#7a0177' :
+				d > 30   ? '#b61586' :
+				d > 25   ? '#e34998' :
+				d > 20   ? '#f986ab' :
+				d > 15   ? '#fcbfc1' :
 							'#feebe2';
 	}
 	
@@ -397,7 +399,7 @@
 	legend.onAdd = function (map) {
 
 		var div = L.DomUtil.create('div', 'info legend'),
-			grades = [0, 50, 100, 150],
+			grades = [0, 15, 20, 25, 30, 35],
 			labels = ['Taxa por 100.000 hab'],
 			from, to;
 
