@@ -103,18 +103,50 @@
     <script src="js/leaflet-providers.js"></script>
     <script src="js/leaflet-timeline-slider.min.js"></script>
     
+    <!-- Dados -->
     <script type="text/javascript" src="data/rj_banco.js"></script>
+    <script type="text/javascript" src="data/escolas_municipais.js"></script>
+    <script type="text/javascript" src="data/escolas_estaduais.js"></script>
+    <script type="text/javascript" src="data/escolas_federais.js"></script>
+    <script type="text/javascript" src="data/estabelecimentos_culturais.js"></script>
+    <script type="text/javascript" src="data/estabelecimentos_esporte_lazer.js"></script>
+    <script type="text/javascript" src="data/hidrografia.js"></script>
 
 <script type="text/javascript">
 
   // Lembrete do link de dev
   // https://rfsaldanha.github.io/app_cavalarica/
   
-  //Pop up
+  //Pop up bairro
   function forEachFeature(feature, layer, year) {
       var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
       '</p>';
       layer.bindPopup(popupContent);
+  }
+  
+  //Outros pop ups
+  function onEachFeature_escolas_municipais(feature, layer) {
+    layer.bindPopup(feature.properties.SMEDBOEs_5);
+  }
+  
+  function onEachFeature_escolas_estaduais(feature, layer) {
+    layer.bindPopup(feature.properties.Nome_Escol);
+  }
+  
+  function onEachFeature_escolas_federais(feature, layer) {
+    layer.bindPopup(feature.properties.Nome_Escol);
+  }
+  
+  function onEachFeature_estabelecimentos_culturais(feature, layer) {
+    layer.bindPopup(feature.properties.Nome);
+  }
+  
+  function onEachFeature_estabelecimentos_esporte_lazer(feature, layer) {
+    layer.bindPopup(feature.properties.Nome);
+  }
+  
+  function onEachFeature_hidrografia(feature, layer) {
+    layer.bindPopup(feature.properties.NOME);
   }
 
 	// Paletas de cores
@@ -191,6 +223,57 @@
 	}
 	
   // Estilos
+  var style_escolas_municipais = {
+    radius: 6,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_escolas_estaduais = {
+    radius: 6,
+    fillColor: "#1a56a4",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_escolas_federais = {
+    radius: 6,
+    fillColor: "#d5283f",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_estabelecimentos_culturais = {
+    radius: 6,
+    fillColor: "#239b0e",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_estabelecimentos_esporte_lazer = {
+    radius: 6,
+    fillColor: "#e805f3",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_hidrografia = {
+    color: "#1f78b4",
+    weight: 1,
+    opacity: 0.8
+  };
+  
 	function style_dengue_tot(feature) {
 		return {
 			weight: 2,
@@ -286,6 +369,48 @@
 	var satelite = L.tileLayer.provider('Esri.WorldImagery');
 
   // Camadas
+  var escolas_municipais = L.geoJSON(escolas_municipais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_escolas_municipais);
+    },
+    onEachFeature: onEachFeature_escolas_municipais
+  });
+  
+  var escolas_estaduais = L.geoJSON(escolas_estaduais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_escolas_estaduais);
+    },
+    onEachFeature: onEachFeature_escolas_estaduais
+  });
+  
+  var escolas_federais = L.geoJSON(escolas_federais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_escolas_federais);
+    },
+    onEachFeature: onEachFeature_escolas_federais
+  });
+  
+  var estabelecimentos_culturais = L.geoJSON(estabelecimentos_culturais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_estabelecimentos_culturais);
+    },
+    onEachFeature: onEachFeature_estabelecimentos_culturais
+  });
+  
+  var estabelecimentos_esporte_lazer = L.geoJSON(estabelecimentos_esporte_lazer_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_estabelecimentos_esporte_lazer);
+    },
+    onEachFeature: onEachFeature_estabelecimentos_esporte_lazer
+  });
+  
+  var hidrografia = L.geoJSON(hidrografia_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_hidrografia);
+    },
+    onEachFeature: onEachFeature_hidrografia
+  });
+  
 	var camada_dengue_tot = L.geoJson(rj_banco, {
 		onEachFeature: forEachFeature,
 		style: style_dengue_tot
@@ -340,7 +465,15 @@
 		"Aquarela": aquarela,
 		"Imagem de satélite": satelite
 	};
-	var overlays = {};
+	var overlays = {
+	  "Dengue": camada_dengue_tot, 
+	  "Escolas municipais": escolas_municipais,
+	  "Escolas estaduais": escolas_estaduais,
+	  "Escolas federais": escolas_federais,
+	  "Estabelecimentos culturais": estabelecimentos_culturais,
+	  "Estabelecimentos de esporte e lazer": estabelecimentos_esporte_lazer,
+	  "Hidrografia": hidrografia
+	};
 
   // Adiciona controle de camadas ao mapa
 	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);

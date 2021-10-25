@@ -1,0 +1,31 @@
+var estabelecimentos_esporte_lazer_banco = {
+"type": "FeatureCollection",
+"name": "estabelecimentos_esporte_lazer",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "OBJECTID_1": 1, "Nome": "Vila Olímpica Miécimo da Silva" }, "geometry": { "type": "Point", "coordinates": [ -43.554223798898505, -22.914928990628685 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 2, "Nome": "Vila Olímpica Jornalista Ary de Carvalho" }, "geometry": { "type": "Point", "coordinates": [ -43.490984788081335, -22.851246548150165 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 3, "Nome": "Vila Olímpica Nilton Santos" }, "geometry": { "type": "Point", "coordinates": [ -43.184567822786249, -22.819232088382023 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 4, "Nome": "Vila Olímpica Grêmio Recreativo dos Industriários da Penha" }, "geometry": { "type": "Point", "coordinates": [ -43.267468927738655, -22.838491810767504 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 5, "Nome": "Vila Olímpica Clara Nunes" }, "geometry": { "type": "Point", "coordinates": [ -43.355316615433978, -22.825923252945937 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 6, "Nome": "Vila Olímpica Félix Mielli Venerando" }, "geometry": { "type": "Point", "coordinates": [ -43.35621842976542, -22.839766791945827 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 7, "Nome": "Vila Olímpica da Maré" }, "geometry": { "type": "Point", "coordinates": [ -43.23944646210542, -22.858625697857782 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 8, "Nome": "Vila Olímpica de Ramos (Parque das Vizinhanças de Ramos - Piscinão)" }, "geometry": { "type": "Point", "coordinates": [ -43.250523071105839, -22.840688908701168 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 10, "Nome": "Vila Olímpica Carlos Castilho" }, "geometry": { "type": "Point", "coordinates": [ -43.268682303347944, -22.860087943763581 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 11, "Nome": "Vila Olímpica Mestre Andre" }, "geometry": { "type": "Point", "coordinates": [ -43.448894066254958, -22.869874022699204 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 13, "Nome": "Vila Olímpica Oscar Schmidt" }, "geometry": { "type": "Point", "coordinates": [ -43.693738188463968, -22.923373308772515 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 14, "Nome": "Vila Olímpica Professor Manoel José Gomes Tubino" }, "geometry": { "type": "Point", "coordinates": [ -43.357182182002731, -22.907252293652615 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 15, "Nome": "Vila Olímpica do Encantado" }, "geometry": { "type": "Point", "coordinates": [ -43.300194038431229, -22.895002486281506 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 16, "Nome": "Vila Olímpica da Gamboa" }, "geometry": { "type": "Point", "coordinates": [ -43.199475045028656, -22.898615628331825 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 17, "Nome": "Vila Olímpica Machado de Assis" }, "geometry": { "type": "Point", "coordinates": [ -43.201267647432651, -22.902613367706302 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 18, "Nome": "Vila Olímpica CIAD Mestre Candeia" }, "geometry": { "type": "Point", "coordinates": [ -43.19370307999079, -22.906454755439711 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 19, "Nome": "Vila Olímpica da Mangueira" }, "geometry": { "type": "Point", "coordinates": [ -43.242226540436334, -22.903569779510043 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 20, "Nome": "Vila Olímpica Artur da Távola" }, "geometry": { "type": "Point", "coordinates": [ -43.259746676466129, -22.914991358783148 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 21, "Nome": "Vila Olímpica Dr. Sócrates Brasileiro" }, "geometry": { "type": "Point", "coordinates": [ -43.624860685088066, -22.989776006106673 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 22, "Nome": "Centro Esportivo Waldir Pereira DIDI" }, "geometry": { "type": "Point", "coordinates": [ -43.44071605391705, -23.010093506039915 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 23, "Nome": "Vila Olímpica do Vidigal" }, "geometry": { "type": "Point", "coordinates": [ -43.245697632868122, -22.995972798571696 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 24, "Nome": "Vila Olímpica Manoel Francisco dos Santos – Mané Garrincha" }, "geometry": { "type": "Point", "coordinates": [ -43.227375915221131, -22.87980850296567 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 25, "Nome": "Vila Olímpica de Deodoro (Parque das Vizinhanças Dias Gomes)" }, "geometry": { "type": "Point", "coordinates": [ -43.383344598267094, -22.853083775751898 ] } },
+{ "type": "Feature", "properties": { "OBJECTID_1": 427, "Nome": "Cidade das Crianças Leonel Brizola" }, "geometry": { "type": "Point", "coordinates": [ -43.68975761348154, -22.891789198209079 ] } }
+]
+}
