@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Fiocruz - ICICT - LIS">
+    <title>Onde estão nossas doenças?</title>
+
+
+    
+
+    <!-- CSS -->
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="leaflet/leaflet.css"/>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
+    
+    <link href="css/custom.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      
+  		html, body {
+  			height: 100%;
+  			margin: 0;
+  		}
+  		
+  		#map {
+  			height: 100%;
+  		}
+		
+      
+      .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+		.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+    </style>
+
+    
+  </head>
+  <body>
+
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="col-12">
+      <div class="h-100 d-flex flex-column">
+        <div class="row">
+          <div class="collapse bg-custom" id="navbarHeader">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                  <h4 class="text-white">Saiba mais</h4>
+                  <p class="text-white">A hepatite A é uma doença endêmica no Brasil e na América Latina. Porém, nos últimos vinte anos, a incidência (número de novos casos) de hepatite A passou de alta para intermediária. Atribui-se essa mudança às melhorias das condições sanitárias e higiênicas no Brasil.</p>
+                  <p class="text-white">A hepatite A é uma doença viral aguda, de manifestações clínicas variadas, ou seja, algumas pessoas podem não apresentar sintomas, enquanto outras podem ter sintomas leves e até graves, porém quadros de maior gravidade ocorrem em menos de 1% dos casos. O quadro clínico é mais intenso à medida que aumenta a idade do paciente. A transmissão da doença é por via fecal-oral: pessoas doentes eliminam o vírus nas fezes, que podem contaminar água, alimentos ou objetos. Raramente, a doença também é transmitida através da pele (inoculação acidental) ou por transfusão de sangue.</p>
+                  </div>
+                  <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Sintomas</h4>
+                    <ul class="list-unstyled">
+                      <li class="text-white">Os sintomas incluem fadiga, náuseas, dor abdominal, perda de apetite e febre baixa.</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="navbar navbar-dark bg-custom shadow-sm">
+            <div class="container">
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Hepatite A</strong>
+              </a>
+              <a class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Saiba mais</a>
+              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+           </div>
+          </div>
+        </div>
+        <div class="row justify-content-center flex-grow-1">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="js/leaflet-providers.js"></script>
+    <script src="js/leaflet-timeline-slider.min.js"></script>
+    
+    <script type="text/javascript" src="data/rj_banco.js"></script>
+
+<script type="text/javascript">
+
+  // Lembrete do link de dev
+  // https://rfsaldanha.github.io/app_cavalarica/
+  
+  //Pop up
+  function forEachFeature(feature, layer, year) {
+      var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
+      '</p>';
+      layer.bindPopup(popupContent);
+  }
+
+	// Paleta de cores para Hepatite
+	function getColor_hepa(d) {
+		return d > 10  ? '#016c59' :
+				d > 8  ? '#16898c' :
+				d > 6   ? '#499fba' :
+				d > 4   ? '#89b6d7' :
+				d > 2   ? '#c9d1e6' :
+							'#f6eff7';
+	}
+	
+  // Estilo para hepa
+	function style_hepa_20(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA20)
+		};
+	}
+	
+	function style_hepa_19(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA19)
+		};
+	}
+	
+	function style_hepa_18(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA18)
+		};
+	}
+	
+	function style_hepa_17(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA17)
+		};
+	}
+	
+	function style_hepa_16(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA16)
+		};
+	}
+	
+	function style_hepa_15(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA15)
+		};
+	}
+	
+	function style_hepa_14(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA14)
+		};
+	}
+	
+	function style_hepa_13(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA13)
+		};
+	}
+	
+	function style_hepa_12(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA12)
+		};
+	}
+	
+	function style_hepa_11(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA11)
+		};
+	}
+	
+	function style_hepa_10(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepa(feature.properties.TXHEPA10)
+		};
+	}
+	
+	// Mapas base
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
+	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+
+  // Camadas hepa
+	var camada_hepa_2020 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_20
+	});
+	
+	var camada_hepa_2019 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_hepa_19
+	});
+	
+	var camada_hepa_2018 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_hepa_18
+	});
+	
+	var camada_hepa_2017 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_17
+	});
+	
+	var camada_hepa_2016 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_16
+	});
+	
+	var camada_hepa_2015 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_15
+	});
+	
+	var camada_hepa_2014 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_14
+	});
+	
+	var camada_hepa_2013 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_13
+	});
+	
+	var camada_hepa_2012 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_12
+	});
+	
+	var camada_hepa_2011 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_11
+	});
+	
+	var camada_hepa_2010 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hepa_10
+	});
+  
+  // Cria mapa
+	var map = L.map('map', {
+		center: [-22.9133, -43.4195],
+		zoom: 11,
+		layers: [osm]
+	});
+
+  // Lista de camadas base e camadas gerais
+	var baseLayers = {
+		"Ruas": osm,
+		"Aquarela": aquarela,
+		"Imagem de satélite": satelite
+	};
+	var overlays = {};
+
+  // Adiciona controle de camadas ao mapa
+	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
+	
+	// Função para alterar a camada
+	altera_camara = function( {label, value, map, exclamation} ) {
+	  // Remove todas as camadas
+      map.removeLayer(camada_hepa_2010);
+      map.removeLayer(camada_hepa_2011);
+      map.removeLayer(camada_hepa_2012);
+      map.removeLayer(camada_hepa_2013);
+      map.removeLayer(camada_hepa_2014);
+      map.removeLayer(camada_hepa_2015);
+      map.removeLayer(camada_hepa_2016);
+      map.removeLayer(camada_hepa_2017);
+      map.removeLayer(camada_hepa_2018);
+      map.removeLayer(camada_hepa_2019);
+      map.removeLayer(camada_hepa_2020);
+      
+    // Adicionar camada conforme timeline
+    if(label == "2010"){
+      map.addLayer(camada_hepa_2010);
+    }
+    
+    if(label == "2011"){
+      map.addLayer(camada_hepa_2011);
+    }
+    
+    if(label == "2012"){
+      map.addLayer(camada_hepa_2012);
+    }
+    
+    if(label == "2013"){
+      map.addLayer(camada_hepa_2013);
+    }
+    
+    if(label == "2014"){
+      map.addLayer(camada_hepa_2014);
+    }
+    
+    if(label == "2015"){
+      map.addLayer(camada_hepa_2015);
+    }
+    
+    if(label == "2016"){
+      map.addLayer(camada_hepa_2016);
+    }
+    
+    if(label == "2017"){
+      map.addLayer(camada_hepa_2017);
+    }
+    
+    if(label == "2018"){
+      map.addLayer(camada_hepa_2018);
+    }
+    
+    if(label == "2019"){
+      map.addLayer(camada_hepa_2019);
+    }
+    
+    if(label == "2020"){
+      map.addLayer(camada_hepa_2020);
+    }
+    
+	};
+	
+	
+	// Adiciona timeline
+	L.control.timelineSlider({
+	              position: "bottomleft",
+                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+                extraChangeMapParams: {greeting: "Hello World!"}, 
+                changeMap: altera_camara })
+            .addTo(map);
+
+  // Cria legenda
+	var legend = L.control({position: 'bottomright'});
+	
+	legend.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 2, 4, 6, 8, 10],
+			labels = ['Taxa por 100.000 hab'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_hepa(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '+'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	legend.addTo(map);
+	
+</script>
+
+
+      
+  </body>
+</html>

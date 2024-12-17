@@ -1,0 +1,1 @@
+msedge.exe --kiosk C:/app_expo/index.html --edge-kiosk-type=fullscreen

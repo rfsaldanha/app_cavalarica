@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Fiocruz - ICICT - LIS">
+    <title>Onde estão nossas doenças?</title>
+
+
+    
+
+    <!-- CSS -->
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="leaflet/leaflet.css"/>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
+    
+    <link href="css/custom.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      
+  		html, body {
+  			height: 100%;
+  			margin: 0;
+  		}
+  		
+  		#map {
+  			height: 100%;
+  		}
+		
+      
+      .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+		.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+    </style>
+
+    
+  </head>
+  <body>
+
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="col-12">
+      <div class="h-100 d-flex flex-column">
+        <div class="row">
+          <div class="collapse bg-custom" id="navbarHeader">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                  <h4 class="text-white">Saiba mais</h4>
+                  <p class="text-white">A violência é uma das maiores questões de políticas públicas do Brasil. A superação desse problema exige estudos capazes de permitir a elaboração de ações preventivas voltadas para fatores modificáveis, entre eles, pobreza, desigualdades sociais, raciais e de gênero. A questão preocupa os cidadãos e os governos de todos os países, uma vez que afeta o bem-estar da população por meio de perdas de patrimônio e/ou danos à integridade física dos indivíduos. Nesse sentido, os crimes impõem uma série de custos à sociedade. Além disso, a criminalidade afeta a atividade turística e a entrada de novos investimentos e provoca a expulsão do investimento existente. No caso específico do Rio de Janeiro, o estado possui uma das maiores taxas de homicídio do país, superando a média brasileira. A criminalidade afeta não somente as pessoas que cometem atos ilegais, como também toda a sociedade, pois, mesmo que o indivíduo não pratique um crime, está sujeito a ser vítima dele.</p>
+                  </div>
+                  <div class="col-sm-4 offset-md-1 py-4">
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="navbar navbar-dark bg-custom shadow-sm">
+            <div class="container">
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Violência</strong>
+              </a>
+              <a class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Saiba mais</a>
+              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+           </div>
+          </div>
+        </div>
+        <div class="row justify-content-center flex-grow-1">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="js/leaflet-providers.js"></script>
+    <script src="js/leaflet-timeline-slider.min.js"></script>
+    
+    <script type="text/javascript" src="data/rj_banco.js"></script>
+
+<script type="text/javascript">
+
+  // Lembrete do link de dev
+  // https://rfsaldanha.github.io/app_cavalarica/
+  
+  //Pop up
+  function forEachFeature(feature, layer, year) {
+      var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
+      '</p>';
+      layer.bindPopup(popupContent);
+  }
+
+	// Paleta de cores para violência
+	function getColor_viol(d) {
+		return d > 600   ? '#bd0026' :
+		    d > 500   ? '#df2722' :
+		    d > 400   ? '#f55629' :
+		    d > 300   ? '#fd8d3c' :
+				d > 200   ? '#feb751' :
+				d > 100   ? '#ffdd79' :
+							'#ffffb2';
+	}
+	
+  // Estilo para viol
+	
+	function style_viol_19(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL19)
+		};
+	}
+	
+	function style_viol_18(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL18)
+		};
+	}
+	
+	function style_viol_17(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL17)
+		};
+	}
+	
+	function style_viol_16(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL16)
+		};
+	}
+	
+	function style_viol_15(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL15)
+		};
+	}
+	
+	function style_viol_14(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL14)
+		};
+	}
+	
+	function style_viol_13(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL13)
+		};
+	}
+	
+	function style_viol_12(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL12)
+		};
+	}
+	
+	function style_viol_11(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL11)
+		};
+	}
+	
+	function style_viol_10(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_viol(feature.properties.TXVIOL10)
+		};
+	}
+	
+	// Mapas base
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
+	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+
+  // Camadas viol
+	
+	var camada_viol_2019 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_viol_19
+	});
+	
+	var camada_viol_2018 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_viol_18
+	});
+	
+	var camada_viol_2017 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_17
+	});
+	
+	var camada_viol_2016 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_16
+	});
+	
+	var camada_viol_2015 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_15
+	});
+	
+	var camada_viol_2014 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_14
+	});
+	
+	var camada_viol_2013 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_13
+	});
+	
+	var camada_viol_2012 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_12
+	});
+	
+	var camada_viol_2011 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_11
+	});
+	
+	var camada_viol_2010 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_viol_10
+	});
+  
+  // Cria mapa
+	var map = L.map('map', {
+		center: [-22.9133, -43.4195],
+		zoom: 11,
+		layers: [osm]
+	});
+
+  // Lista de camadas base e camadas gerais
+	var baseLayers = {
+		"Ruas": osm,
+		"Aquarela": aquarela,
+		"Imagem de satélite": satelite
+	};
+	var overlays = {};
+
+  // Adiciona controle de camadas ao mapa
+	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
+	
+	// Função para alterar a camada
+	altera_camara = function( {label, value, map, exclamation} ) {
+	  // Remove todas as camadas
+      map.removeLayer(camada_viol_2010);
+      map.removeLayer(camada_viol_2011);
+      map.removeLayer(camada_viol_2012);
+      map.removeLayer(camada_viol_2013);
+      map.removeLayer(camada_viol_2014);
+      map.removeLayer(camada_viol_2015);
+      map.removeLayer(camada_viol_2016);
+      map.removeLayer(camada_viol_2017);
+      map.removeLayer(camada_viol_2018);
+      map.removeLayer(camada_viol_2019);
+      
+    // Adicionar camada conforme timeline
+    if(label == "2010"){
+      map.addLayer(camada_viol_2010);
+    }
+    
+    if(label == "2011"){
+      map.addLayer(camada_viol_2011);
+    }
+    
+    if(label == "2012"){
+      map.addLayer(camada_viol_2012);
+    }
+    
+    if(label == "2013"){
+      map.addLayer(camada_viol_2013);
+    }
+    
+    if(label == "2014"){
+      map.addLayer(camada_viol_2014);
+    }
+    
+    if(label == "2015"){
+      map.addLayer(camada_viol_2015);
+    }
+    
+    if(label == "2016"){
+      map.addLayer(camada_viol_2016);
+    }
+    
+    if(label == "2017"){
+      map.addLayer(camada_viol_2017);
+    }
+    
+    if(label == "2018"){
+      map.addLayer(camada_viol_2018);
+    }
+    
+    if(label == "2019"){
+      map.addLayer(camada_viol_2019);
+    }
+    
+	};
+	
+	
+	// Adiciona timeline
+	L.control.timelineSlider({
+	              position: "bottomleft",
+                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2017", "2018", "2019"],
+                extraChangeMapParams: {greeting: "Hello World!"}, 
+                changeMap: altera_camara })
+            .addTo(map);
+
+  // Cria legenda
+	var legend = L.control({position: 'bottomright'});
+	
+	legend.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 100, 200, 400, 500, 600],
+			labels = ['Taxa por 100.000 hab'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_viol(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '+'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	legend.addTo(map);
+	
+</script>
+
+
+      
+  </body>
+</html>

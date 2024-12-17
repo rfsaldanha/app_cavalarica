@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Fiocruz - ICICT - LIS">
+  <title>Onde estão nossas doenças?</title>
+
+
+  
+
+  <!-- CSS -->
+  <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="leaflet/leaflet.css"/>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"> 
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+  <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
+  
+  <link href="css/custom.css" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+    
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		
+		#map {
+			height: 100%;
+		}
+	
+    
+    .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+  </style>
+</head>
+
+<body>
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="col-12">
+      <div class="h-100 d-flex flex-column">
+        <div class="row">
+          <div class="collapse bg-custom" id="navbarHeader">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6 py-4">
+                  <h3 class="text-white">IDS</h3>
+                  <p class="text-white">O Índice de Desenvolvimento Social é construído a partir de variáveis do Censo Demográfico que contemplam dados de saneamento, habitação, escolaridade e renda. Esse índice busca caracterizar situações relativas tanto ao domicílio quanto às pessoas que o habitam.</p>
+                  <h3 class="text-white">Água</h3>
+                  <p class="text-white">Percentual de domicílios com fornecimento de água potável por rede de distribuição ou por poço, nascente ou cisterna, com canalização interna, em qualquer caso sem intermitências (paralisações ou interrupções) em relação ao total de domicílios.</p>
+                  <h3 class="text-white">Esgoto</h3>
+                  <p class="text-white">Percentual de domicílios com com coleta de esgotos, seguida de tratamento ou uso de fossa séptica em relação ao total de domicílios.</p>
+                  </div>
+                  <div class="col-md-6 py-4">
+                    <h3 class="text-white">Lixo</h3>
+                    <p class="text-white">Percentual de domicílios atendidos, direta ou indiretamente, por serviço regular de coleta de lixo domiciliar em relação ao total de domicílios.</p>
+                    <h3 class="text-white">Analfabetismo</h3>
+                    <p class="text-white"> Número de pessoas analfabetas entre 10 e a14 anos em relação ao total da população de 10 a 14 anos.</p>
+                    <h3 class="text-white">Renda até 1SM</h3>
+                    <p class="text-white">Percentual de domicílios em que a renda por habitantes atinge até um salário mínimo, indica o nível econômico de uma determinada população.</p>
+                    <h3 class="text-white">Renda superior 5SM</h3>
+                    <p class="text-white">Percentual de domicílios em que a renda por habitantes é superior a cinco salários mínimos, indica o nível econômico de uma determinada população.</p>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="navbar navbar-dark bg-custom shadow-sm">
+            <div class="container">
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Hepatites virais</strong>
+              </a>
+              <a class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Saiba mais</a>
+              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+           </div>
+          </div>
+        </div>
+        <div class="row justify-content-center flex-grow-1">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="js/leaflet-providers.js"></script>
+    <script src="js/leaflet-timeline-slider.min.js"></script>
+    
+    <!-- Dados -->
+    <script type="text/javascript" src="data/rj_banco.js"></script>
+    <script type="text/javascript" src="data/escolas_municipais.js"></script>
+    <script type="text/javascript" src="data/escolas_estaduais.js"></script>
+    <script type="text/javascript" src="data/escolas_federais.js"></script>
+    <script type="text/javascript" src="data/estabelecimentos_culturais.js"></script>
+    <script type="text/javascript" src="data/estabelecimentos_esporte_lazer.js"></script>
+    <script type="text/javascript" src="data/hidrografia.js"></script>
+
+<script type="text/javascript">
+
+  // Lembrete do link de dev
+  // https://rfsaldanha.github.io/app_cavalarica/
+  
+  //Pop up bairro
+  function forEachFeature(feature, layer, year) {
+      var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
+      '</p>';
+      layer.bindPopup(popupContent);
+  }
+  
+  //Outros pop ups
+  function onEachFeature_escolas_municipais(feature, layer) {
+    layer.bindPopup(feature.properties.SMEDBOEs_5);
+  }
+  
+  function onEachFeature_escolas_estaduais(feature, layer) {
+    layer.bindPopup(feature.properties.Nome_Escol);
+  }
+  
+  function onEachFeature_escolas_federais(feature, layer) {
+    layer.bindPopup(feature.properties.Nome_Escol);
+  }
+  
+  function onEachFeature_estabelecimentos_culturais(feature, layer) {
+    layer.bindPopup(feature.properties.Nome);
+  }
+  
+  function onEachFeature_estabelecimentos_esporte_lazer(feature, layer) {
+    layer.bindPopup(feature.properties.Nome);
+  }
+  
+  function onEachFeature_hidrografia(feature, layer) {
+    layer.bindPopup(feature.properties.NOME);
+  }
+
+	// Paletas de cores
+	function getColor_hepv_tot(d) {
+		return d > 35   ? '#7a0177' :
+				d > 30   ? '#b61586' :
+				d > 25   ? '#e34998' :
+				d > 20   ? '#f986ab' :
+				d > 15   ? '#fcbfc1' :
+							'#feebe2';
+	}
+	
+	function getColor_ids(d) {
+		return d > 0.68  ? '#fde725' :
+				d > 0.62   ? '#7ad251' :
+				d > 0.59   ? '#22a884' :
+				d > 0.57   ? '#29788e' :
+				d > 0.55   ? '#404387' :
+							'#440154';
+	}
+	
+	function getColor_abas_agua(d) {
+		return d > 99.88  ? '#045a8d' :
+				d > 99.76   ? '#2382b4' :
+				d > 99.47   ? '#579ec8' :
+				d > 98.99   ? '#91b6d7' :
+				d > 97.77   ? '#c8d1e6' :
+							'#f1eef6';
+	}
+	
+	function getColor_serv_esgoto(d) {
+		return d > 99.34  ? '#993404' :
+				d > 98.38   ? '#cc560c' :
+				d > 96.04   ? '#f0821e' :
+				d > 92.16   ? '#feb351' :
+				d > 84.89   ? '#ffe19c' :
+							'#ffffd4';
+	}
+	
+	function getColor_col_lixo(d) {
+		return d > 99.99  ? '#7a0177' :
+				d > 99.96   ? '#b61586' :
+				d > 99.81   ? '#e34998' :
+				d > 99.58   ? '#f986ab' :
+				d > 98.63   ? '#fcbfc1' :
+							'#feebe2';
+	}
+	
+	function getColor_analf(d) {
+		return d > 2.73  ? '#016c59' :
+				d > 1.98   ? '#16898c' :
+				d > 1.55   ? '#499fba' :
+				d > 1.13   ? '#89b6d7' :
+				d > 0.83   ? '#c9d1e6' :
+							'#f6eff7';
+	}
+	
+	function getColor_rend_1sm(d) {
+		return d > 60.24  ? '#7f2704' :
+				d > 51.40   ? '#d14501' :
+				d > 42.90   ? '#f67722' :
+				d > 34.85   ? '#fdac67' :
+				d > 19.33   ? '#fedbb7' :
+							'#fff5eb';
+	}
+	
+	function getColor_rend_5sm(d) {
+		return d > 25.14  ? '#253494' :
+				d > 9.81   ? '#2a70b1' :
+				d > 5.90   ? '#38a0bf' :
+				d > 3.28   ? '#67c5be' :
+				d > 1.61   ? '#b4e2b9' :
+							'#ffffcc';
+	}
+	
+  // Estilos
+  var style_escolas_municipais = {
+    radius: 6,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_escolas_estaduais = {
+    radius: 6,
+    fillColor: "#1a56a4",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_escolas_federais = {
+    radius: 6,
+    fillColor: "#d5283f",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_estabelecimentos_culturais = {
+    radius: 6,
+    fillColor: "#239b0e",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_estabelecimentos_esporte_lazer = {
+    radius: 6,
+    fillColor: "#e805f3",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+  };
+  
+  var style_hidrografia = {
+    color: "#1f78b4",
+    weight: 1,
+    opacity: 0.8
+  };
+  
+	function style_hepv_tot(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hepv_tot(feature.properties.TXHEPTOT)
+		};
+	}
+	
+	function style_ids(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_ids(feature.properties.IDS)
+		};
+	}
+	
+	function style_abas_agua(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_abas_agua(feature.properties.PDAGUA)
+		};
+	}
+	
+	function style_serv_esgoto(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_serv_esgoto(feature.properties.PDESG)
+		};
+	}
+	
+	function style_col_lixo(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_col_lixo(feature.properties.PDLIXO)
+		};
+	}
+	
+	function style_analf(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_analf(feature.properties.PANA10_14)
+		};
+	}
+	
+	function style_rend_1sm(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_rend_1sm(feature.properties.PDATE1SM)
+		};
+	}
+	
+	function style_rend_5sm(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_rend_5sm(feature.properties.PDSUP5SM)
+		};
+	}
+	
+	
+	// Mapas base
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
+	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+
+  // Camadas
+  var escolas_municipais = L.geoJSON(escolas_municipais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_escolas_municipais);
+    },
+    onEachFeature: onEachFeature_escolas_municipais
+  });
+  
+  var escolas_estaduais = L.geoJSON(escolas_estaduais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_escolas_estaduais);
+    },
+    onEachFeature: onEachFeature_escolas_estaduais
+  });
+  
+  var escolas_federais = L.geoJSON(escolas_federais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_escolas_federais);
+    },
+    onEachFeature: onEachFeature_escolas_federais
+  });
+  
+  var estabelecimentos_culturais = L.geoJSON(estabelecimentos_culturais_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_estabelecimentos_culturais);
+    },
+    onEachFeature: onEachFeature_estabelecimentos_culturais
+  });
+  
+  var estabelecimentos_esporte_lazer = L.geoJSON(estabelecimentos_esporte_lazer_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_estabelecimentos_esporte_lazer);
+    },
+    onEachFeature: onEachFeature_estabelecimentos_esporte_lazer
+  });
+  
+  var hidrografia = L.geoJSON(hidrografia_banco, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, style_hidrografia);
+    },
+    onEachFeature: onEachFeature_hidrografia
+  });
+  
+	var camada_hepv_tot = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_hepv_tot
+	});
+	
+	var camada_ids = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_ids
+	});
+	
+	var camada_abas_agua = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_abas_agua
+	});
+	
+	var camada_serv_esgoto = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_serv_esgoto
+	});
+	
+	var camada_col_lixo = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_col_lixo
+	});
+	
+	var camada_analf = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_analf
+	});
+	
+	var camada_rend_1sm = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_rend_1sm
+	});
+	
+	var camada_rend_5sm = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_rend_5sm
+	});
+
+  
+  // Cria mapa
+	var map = L.map('map', {
+		center: [-22.9133, -43.4195],
+		zoom: 11,
+		layers: [osm]
+	});
+
+  // Lista de camadas base e camadas gerais
+	var baseLayers = {
+		"Ruas": osm,
+		"Aquarela": aquarela,
+		"Imagem de satélite": satelite
+	};
+	var overlays = {
+	  "Hepatites virais": camada_hepv_tot, 
+	  "Escolas municipais": escolas_municipais,
+	  "Escolas estaduais": escolas_estaduais,
+	  "Escolas federais": escolas_federais,
+	  "Estabelecimentos culturais": estabelecimentos_culturais,
+	  "Estabelecimentos de esporte e lazer": estabelecimentos_esporte_lazer,
+	  "Hidrografia": hidrografia
+	};
+
+  // Adiciona controle de camadas ao mapa
+	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
+	
+	// Legendas
+	var legend_hepv_tot = L.control({position: 'bottomright'});
+	legend_hepv_tot.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 15, 20, 25, 30, 35],
+			labels = ['Hepatites virais,</br> taxa por 100.000 hab'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_hepv_tot(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;4767'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+	
+	var legend_ids = L.control({position: 'bottomright'});
+	legend_ids.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0.28, 0.55, 0.57, 0.59, 0.62, 0.68],
+			labels = ['IDS - Índice de </br> Desenvolvimento Social'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_ids(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;1'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+	
+	var legend_abas_agua = L.control({position: 'bottomright'});
+	legend_abas_agua.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [9.09, 97.77, 98.99, 99.47, 99.76, 99.88],
+			labels = ['Percentual de domicílios com </br> abastecimento de água adequado'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_abas_agua(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;100'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+	
+	var legend_serv_esgoto = L.control({position: 'bottomright'});
+	legend_serv_esgoto.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 84.89, 92.16, 96.04, 98.38, 99.34],
+			labels = ['Percentual de domicílios com </br> serviço de esgoto adequado'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_serv_esgoto(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;99.93'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+	
+	var legend_col_lixo = L.control({position: 'bottomright'});
+	legend_col_lixo.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [89.17, 98.63, 99.58, 99.81, 99.96, 99.99],
+			labels = ['Percentual de domicílios com </br> coleta de lixo adequada'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_col_lixo(from + 0.01) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;100'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+	
+	var legend_analf = L.control({position: 'bottomright'});
+	legend_analf.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 0.83, 1.13, 1.55, 1.98, 2.73],
+			labels = ['Percentual de analfabetismo de </br> 10 a 14 anos'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_analf(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;4,9'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+	
+	var legend_rend_1sm = L.control({position: 'bottomright'});
+	legend_rend_1sm.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [5.07, 19.33, 34.85, 42.90, 51.40, 60.24],
+			labels = ['Percentual dos domicílios com rendimento domiciliar </br> per capita de até um salário mínimo'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_rend_1sm(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;100'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+	
+	var legend_rend_5sm = L.control({position: 'bottomright'});
+	legend_rend_5sm.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 1.61, 3.28, 5.90, 9.81, 25.14],
+			labels = ['Percentual dos domicílios com rendimento domiciliar </br> per capita superior a 5 salários mínimos'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_rend_5sm(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '&ndash;76.05'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	// Função para alterar a camada
+	altera_camara = function( {label, value, map, exclamation} ) {
+	  // Remove todas as camadas
+      map.removeLayer(camada_hepv_tot);
+      map.removeControl(legend_hepv_tot);
+      map.removeLayer(camada_ids);
+      map.removeControl(legend_ids);
+      map.removeLayer(camada_abas_agua);
+      map.removeControl(legend_abas_agua);
+      map.removeLayer(camada_serv_esgoto);
+      map.removeControl(legend_serv_esgoto);
+      map.removeLayer(camada_col_lixo);
+      map.removeControl(legend_col_lixo);
+      map.removeLayer(camada_analf);
+      map.removeControl(legend_analf);
+      map.removeLayer(camada_rend_1sm);
+      map.removeControl(legend_rend_1sm);
+      map.removeLayer(camada_rend_5sm);
+      map.removeControl(legend_rend_5sm);
+      
+      
+    // Adicionar camada conforme timeline
+    if(label == "Hepatites virais"){
+      map.addLayer(camada_hepv_tot);
+      legend_hepv_tot.addTo(map);
+    }
+    
+    if(label == "IDS"){
+      map.addLayer(camada_ids);
+      legend_ids.addTo(map);
+    }
+    
+    if(label == "Água"){
+      map.addLayer(camada_abas_agua);
+      legend_abas_agua.addTo(map);
+    }
+    
+    if(label == "Esgoto"){
+      map.addLayer(camada_serv_esgoto);
+      legend_serv_esgoto.addTo(map);
+    }
+    
+    if(label == "Lixo"){
+      map.addLayer(camada_col_lixo);
+      legend_col_lixo.addTo(map);
+    }
+    
+    if(label == "Analfa-betismo"){
+      map.addLayer(camada_analf);
+      legend_analf.addTo(map);
+    }
+    
+    if(label == "Renda até 1SM"){
+      map.addLayer(camada_rend_1sm);
+      legend_rend_1sm.addTo(map);
+    }
+    
+    if(label == "Renda superior 5SM"){
+      map.addLayer(camada_rend_5sm);
+      legend_rend_5sm.addTo(map);
+    }
+    
+	};
+	
+	
+	// Adiciona timeline
+	L.control.timelineSlider({
+	              position: "bottomleft",
+                timelineItems: ["Hepatites virais", "IDS", "Água", "Esgoto", "Lixo", "Analfa-betismo", "Renda até 1SM", "Renda superior 5SM"],
+                extraChangeMapParams: {greeting: "Hello World!"}, 
+                changeMap: altera_camara })
+            .addTo(map);
+	
+</script>
+
+
+      
+  </body>
+</html>

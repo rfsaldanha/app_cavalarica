@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Fiocruz - ICICT - LIS">
+    <title>Onde estão nossas doenças?</title>
+
+
+    
+
+    <!-- CSS -->
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="leaflet/leaflet.css"/>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
+    
+    <link href="css/custom.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      
+  		html, body {
+  			height: 100%;
+  			margin: 0;
+  		}
+  		
+  		#map {
+  			height: 100%;
+  		}
+		
+      
+      .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+		.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+    </style>
+
+    
+  </head>
+  <body>
+
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="col-12">
+      <div class="h-100 d-flex flex-column">
+        <div class="row">
+          <div class="collapse bg-custom" id="navbarHeader">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                  <h4 class="text-white">Saiba mais</h4>
+                  <p class="text-white">A tuberculose (TB) é um problema de saúde prioritário no Brasil. O país, juntamente com outras 21 nações em desenvolvimento, responde por 80% dos casos da doença em todo o mundo. Estima-se que cerca de um terço da população mundial esteja infectada pela bactéria Mycobacterium tuberculosis, estando sob risco de desenvolver a enfermidade. A tuberculose é transmitida de pessoa a pessoa, principalmente, através do ar. A fala, o espirro e, principalmente, a tosse de um doente com tuberculose pulmonar lança no ar gotículas de tamanhos variados, contendo no seu interior a bactéria causadora da doença. Com o surgimento, em 1981, da síndrome de imunodeficiência adquirida (Sida/Aids), vem-se observando, tanto em países desenvolvidos como nos países em desenvolvimento, um crescente número de casos notificados de tuberculose em pessoas infectadas pelo vírus da imunodeficiência humana (HIV). A associação HIV/TB constitui, nos dias atuais, um sério problema de saúde pública, podendo levar ao aumento da morbidade e mortalidade pela TB em muitos países.</p>
+                  </div>
+                  <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Sintomas</h4>
+                    <ul class="list-unstyled">
+                      <li class="text-white">A maioria das pessoas infectadas com a bactéria que causa a tuberculose não apresenta sintomas. Quando ocorrem, os sintomas geralmente incluem tosse (às vezes, com sangue), perda de peso, sudorese noturna e febre.</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="navbar navbar-dark bg-custom shadow-sm">
+            <div class="container">
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Tuberculose</strong>
+              </a>
+              <a class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Saiba mais</a>
+              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+           </div>
+          </div>
+        </div>
+        <div class="row justify-content-center flex-grow-1">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="js/leaflet-providers.js"></script>
+    <script src="js/leaflet-timeline-slider.min.js"></script>
+    
+    <script type="text/javascript" src="data/rj_banco.js"></script>
+
+<script type="text/javascript">
+
+  // Lembrete do link de dev
+  // https://rfsaldanha.github.io/app_cavalarica/
+  
+  //Pop up
+  function forEachFeature(feature, layer, year) {
+      var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
+      '</p>';
+      layer.bindPopup(popupContent);
+  }
+
+	// Paleta de cores para tuberculose
+	function getColor_tuber(d) {
+		return d > 700   ? '#7a0177' :
+		    d > 600   ? '#a50f82' :
+		    d > 500   ? '#cc268d' :
+		    d > 400   ? '#e9529b' :
+		    d > 300   ? '#f97ea8' :
+				d > 200   ? '#fba9b6' :
+				d > 100   ? '#fdcccb' :
+							'#feebe2';
+	}
+	
+  // Estilo para tuber
+	
+	function style_tuber_20(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB20)
+		};
+	}
+	
+	function style_tuber_19(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB19)
+		};
+	}
+	
+	function style_tuber_18(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB18)
+		};
+	}
+	
+	function style_tuber_17(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB17)
+		};
+	}
+	
+	function style_tuber_16(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB16)
+		};
+	}
+	
+	function style_tuber_15(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB15)
+		};
+	}
+	
+	function style_tuber_14(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB14)
+		};
+	}
+	
+	function style_tuber_13(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB13)
+		};
+	}
+	
+	function style_tuber_12(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB12)
+		};
+	}
+	
+	function style_tuber_11(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB11)
+		};
+	}
+	
+	function style_tuber_10(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_tuber(feature.properties.TXTB10)
+		};
+	}
+	
+	// Mapas base
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
+	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+
+  // Camadas tuber
+	
+	var camada_tuber_2020 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_tuber_20
+	});
+	
+	var camada_tuber_2019 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_tuber_19
+	});
+	
+	var camada_tuber_2018 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_tuber_18
+	});
+	
+	var camada_tuber_2017 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_17
+	});
+	
+	var camada_tuber_2016 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_16
+	});
+	
+	var camada_tuber_2015 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_15
+	});
+	
+	var camada_tuber_2014 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_14
+	});
+	
+	var camada_tuber_2013 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_13
+	});
+	
+	var camada_tuber_2012 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_12
+	});
+	
+	var camada_tuber_2011 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_11
+	});
+	
+	var camada_tuber_2010 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_tuber_10
+	});
+  
+  // Cria mapa
+	var map = L.map('map', {
+		center: [-22.9133, -43.4195],
+		zoom: 11,
+		layers: [osm]
+	});
+
+  // Lista de camadas base e camadas gerais
+	var baseLayers = {
+		"Ruas": osm,
+		"Aquarela": aquarela,
+		"Imagem de satélite": satelite
+	};
+	var overlays = {};
+
+  // Adiciona controle de camadas ao mapa
+	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
+	
+	// Função para alterar a camada
+	altera_camara = function( {label, value, map, exclamation} ) {
+	  // Remove todas as camadas
+      map.removeLayer(camada_tuber_2010);
+      map.removeLayer(camada_tuber_2011);
+      map.removeLayer(camada_tuber_2012);
+      map.removeLayer(camada_tuber_2013);
+      map.removeLayer(camada_tuber_2014);
+      map.removeLayer(camada_tuber_2015);
+      map.removeLayer(camada_tuber_2016);
+      map.removeLayer(camada_tuber_2017);
+      map.removeLayer(camada_tuber_2018);
+      map.removeLayer(camada_tuber_2019);
+      map.removeLayer(camada_tuber_2020);
+      
+    // Adicionar camada conforme timeline
+    if(label == "2010"){
+      map.addLayer(camada_tuber_2010);
+    }
+    
+    if(label == "2011"){
+      map.addLayer(camada_tuber_2011);
+    }
+    
+    if(label == "2012"){
+      map.addLayer(camada_tuber_2012);
+    }
+    
+    if(label == "2013"){
+      map.addLayer(camada_tuber_2013);
+    }
+    
+    if(label == "2014"){
+      map.addLayer(camada_tuber_2014);
+    }
+    
+    if(label == "2015"){
+      map.addLayer(camada_tuber_2015);
+    }
+    
+    if(label == "2016"){
+      map.addLayer(camada_tuber_2016);
+    }
+    
+    if(label == "2017"){
+      map.addLayer(camada_tuber_2017);
+    }
+    
+    if(label == "2018"){
+      map.addLayer(camada_tuber_2018);
+    }
+    
+    if(label == "2019"){
+      map.addLayer(camada_tuber_2019);
+    }
+    
+    if(label == "2020"){
+      map.addLayer(camada_tuber_2020);
+    }
+    
+	};
+	
+	
+	// Adiciona timeline
+	L.control.timelineSlider({
+	              position: "bottomleft",
+                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"],
+                extraChangeMapParams: {greeting: "Hello World!"}, 
+                changeMap: altera_camara })
+            .addTo(map);
+
+  // Cria legenda
+	var legend = L.control({position: 'bottomright'});
+	
+	legend.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 100, 200, 400, 500, 600, 700],
+			labels = ['Taxa por 100.000 hab'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_tuber(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '+'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	legend.addTo(map);
+	
+</script>
+
+
+      
+  </body>
+</html>

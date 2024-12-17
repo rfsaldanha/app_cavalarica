@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Fiocruz - ICICT - LIS">
+    <title>Onde estão nossas doenças?</title>
+
+
+    
+
+    <!-- CSS -->
+    <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="leaflet/leaflet.css"/>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Barlow&display=swap" rel="stylesheet">
+    
+    <link href="css/custom.css" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      
+  		html, body {
+  			height: 100%;
+  			margin: 0;
+  		}
+  		
+  		#map {
+  			height: 100%;
+  		}
+		
+      
+      .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+		.legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+    </style>
+
+    
+  </head>
+  <body>
+
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="col-12">
+      <div class="h-100 d-flex flex-column">
+        <div class="row">
+          <div class="collapse bg-custom" id="navbarHeader">
+            <div class="container">
+              <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                  <h4 class="text-white">Saiba mais</h4>
+                  <p class="text-white">A hanseníase é uma doença crônica, causada pela bactéria Mycobacterium leprae. A doença parece ser uma das mais antigas a atingir a humanidade (há registros de casos desde 600 a.C.).</p>
+                  <p class="text-white">A doença é transmitida principalmente pelas vias respiratórias: pessoas doentes e sem tratamento eliminam bactérias em secreções nasais e gotículas de saliva.</p>
+                  <p class="text-white">A hanseníase apresenta longo período de incubação; em média, de dois a sete anos. A bactéria tem a capacidade de infectar grande número de indivíduos, no entanto, poucos adoecem. O domicílio é apontado como importante espaço de transmissão da doença, que tem um alto potencial incapacitante. A melhoria das condições de vida e o avanço do conhecimento científico modificaram significativamente o quadro da hanseníase, que atualmente tem tratamento e cura.</p>
+                  </div>
+                  <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Sintomas</h4>
+                    <ul class="list-unstyled">
+                      <li class="text-white">Os sintomas incluem manchas claras ou vermelhas na pele com diminuição da sensibilidade, dormência e fraqueza nas mãos e nos pés.</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="navbar navbar-dark bg-custom shadow-sm">
+            <div class="container">
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                <strong>Hanseníase</strong>
+              </a>
+              <a class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false">Saiba mais</a>
+              <a href="index.html" class="btn btn-sm btn-light">Voltar</a>
+           </div>
+          </div>
+        </div>
+        <div class="row justify-content-center flex-grow-1">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="leaflet/leaflet.js"></script>
+    <script src="js/leaflet-providers.js"></script>
+    <script src="js/leaflet-timeline-slider.min.js"></script>
+    
+    <script type="text/javascript" src="data/rj_banco.js"></script>
+
+<script type="text/javascript">
+
+  // Lembrete do link de dev
+  // https://rfsaldanha.github.io/app_cavalarica/
+  
+  //Pop up
+  function forEachFeature(feature, layer, year) {
+      var popupContent = "<p><b>Bairro: </b>" + feature.properties.FIRST_NM_B + 
+      '</p>';
+      layer.bindPopup(popupContent);
+  }
+
+	// Paleta de cores para Hanseíanse
+	function getColor_hans(d) {
+		return d > 10  ? '#810f7c' :
+				d > 8  ? '#87489f' :
+				d > 6   ? '#8a7cba' :
+				d > 4   ? '#9cacd2' :
+				d > 2   ? '#bfd6e8' :
+							'#edf8fb';
+	}
+	
+  // Estilo para hans
+	function style_hans_20(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE20)
+		};
+	}
+	
+	function style_hans_18(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE18)
+		};
+	}
+	
+	function style_hans_17(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE17)
+		};
+	}
+	
+	function style_hans_16(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE16)
+		};
+	}
+	
+	function style_hans_15(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE15)
+		};
+	}
+	
+	function style_hans_14(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE14)
+		};
+	}
+	
+	function style_hans_13(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE13)
+		};
+	}
+	
+	function style_hans_12(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE12)
+		};
+	}
+	
+	function style_hans_11(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE11)
+		};
+	}
+	
+	function style_hans_10(feature) {
+		return {
+			weight: 2,
+			opacity: 1,
+			color: 'white',
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: getColor_hans(feature.properties.TXHANSE10)
+		};
+	}
+	
+	// Mapas base
+	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
+	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+
+  // Camadas Hans
+	var camada_hans_2020 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_20
+	});
+	
+	var camada_hans_2018 = L.geoJson(rj_banco, {
+		onEachFeature: forEachFeature,
+		style: style_hans_18
+	});
+	
+	var camada_hans_2017 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_17
+	});
+	
+	var camada_hans_2016 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_16
+	});
+	
+	var camada_hans_2015 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_15
+	});
+	
+	var camada_hans_2014 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_14
+	});
+	
+	var camada_hans_2013 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_13
+	});
+	
+	var camada_hans_2012 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_12
+	});
+	
+	var camada_hans_2011 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_11
+	});
+	
+	var camada_hans_2010 = L.geoJson(rj_banco, {
+	  onEachFeature: forEachFeature,
+		style: style_hans_10
+	});
+  
+  // Cria mapa
+	var map = L.map('map', {
+		center: [-22.9133, -43.4195],
+		zoom: 11,
+		layers: [osm]
+	});
+
+  // Lista de camadas base e camadas gerais
+	var baseLayers = {
+		"Ruas": osm,
+		"Aquarela": aquarela,
+		"Imagem de satélite": satelite
+	};
+	var overlays = {};
+
+  // Adiciona controle de camadas ao mapa
+	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
+	
+	// Função para alterar a camada
+	altera_camara = function( {label, value, map, exclamation} ) {
+	  // Remove todas as camadas
+      map.removeLayer(camada_hans_2010);
+      map.removeLayer(camada_hans_2011);
+      map.removeLayer(camada_hans_2012);
+      map.removeLayer(camada_hans_2013);
+      map.removeLayer(camada_hans_2014);
+      map.removeLayer(camada_hans_2015);
+      map.removeLayer(camada_hans_2016);
+      map.removeLayer(camada_hans_2017);
+      map.removeLayer(camada_hans_2018);
+      map.removeLayer(camada_hans_2020);
+      
+    // Adicionar camada conforme timeline
+    if(label == "2010"){
+      map.addLayer(camada_hans_2010);
+    }
+    
+    if(label == "2011"){
+      map.addLayer(camada_hans_2011);
+    }
+    
+    if(label == "2012"){
+      map.addLayer(camada_hans_2012);
+    }
+    
+    if(label == "2013"){
+      map.addLayer(camada_hans_2013);
+    }
+    
+    if(label == "2014"){
+      map.addLayer(camada_hans_2014);
+    }
+    
+    if(label == "2015"){
+      map.addLayer(camada_hans_2015);
+    }
+    
+    if(label == "2016"){
+      map.addLayer(camada_hans_2016);
+    }
+    
+    if(label == "2017"){
+      map.addLayer(camada_hans_2017);
+    }
+    
+    if(label == "2018"){
+      map.addLayer(camada_hans_2018);
+    }
+    
+    if(label == "2020"){
+      map.addLayer(camada_hans_2020);
+    }
+    
+	};
+	
+	
+	// Adiciona timeline
+	L.control.timelineSlider({
+	              position: "bottomleft",
+                timelineItems: ["2010", "2011", "2012","2013", "2014", "2015", "2016", "2017", "2018", "2020"],
+                extraChangeMapParams: {greeting: "Hello World!"}, 
+                changeMap: altera_camara })
+            .addTo(map);
+
+  // Cria legenda
+	var legend = L.control({position: 'bottomright'});
+	
+	legend.onAdd = function (map) {
+
+		var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 2, 4, 6, 8, 10],
+			labels = ['Taxa por 100.000 hab'],
+			from, to;
+
+		for (var i = 0; i < grades.length; i++) {
+			from = grades[i];
+			to = grades[i + 1];
+
+			labels.push(
+				'<i style="background:' + getColor_hans(from + 1) + '"></i> ' +
+				from + (to ? '&ndash;' + to : '+'));
+		}
+
+		div.innerHTML = labels.join('<br>');
+		return div;
+	};
+
+	legend.addTo(map);
+	
+</script>
+
+
+      
+  </body>
+</html>
