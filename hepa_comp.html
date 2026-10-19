@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="utf-8">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="Fiocruz - ICICT - LIS">
@@ -101,6 +102,7 @@
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="leaflet/leaflet.js"></script>
     <script src="js/leaflet-providers.js"></script>
+    <script src="js/mapas-base.js"></script>
     <script src="js/leaflet-timeline-slider.min.js"></script>
     
     <!-- Dados -->
@@ -364,9 +366,7 @@
 	
 	
 	// Mapas base
-	var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-	var aquarela = L.tileLayer.provider('Stamen.Watercolor');
-	var satelite = L.tileLayer.provider('Esri.WorldImagery');
+	var mapasBase = CavalaricaMapas.criar();
 
   // Camadas
   var escolas_municipais = L.geoJSON(escolas_municipais_banco, {
@@ -456,15 +456,13 @@
 	var map = L.map('map', {
 		center: [-22.9133, -43.4195],
 		zoom: 11,
-		layers: [osm]
+		minZoom: 1,
+		maxZoom: 19,
+		layers: [mapasBase.inicial]
 	});
 
   // Lista de camadas base e camadas gerais
-	var baseLayers = {
-		"Ruas": osm,
-		"Aquarela": aquarela,
-		"Imagem de satélite": satelite
-	};
+	var baseLayers = mapasBase.camadas;
 	var overlays = {
 	  "Hepatite A": camada_hepa_tot, 
 	  "Escolas municipais": escolas_municipais,
@@ -477,6 +475,7 @@
 
   // Adiciona controle de camadas ao mapa
 	Lcontrol = L.control.layers(baseLayers, overlays, {position: 'topleft'}).addTo(map);
+	mapasBase.acompanhar(map);
 	
 	// Legendas
 	var legend_hepa_tot = L.control({position: 'bottomright'});

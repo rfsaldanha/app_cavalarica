@@ -47,3 +47,10 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Python local server
+__pycache__/
+*.pyc
+
+# Pacote para distribuicao local
+/dist/

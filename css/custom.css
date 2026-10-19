@@ -22,3 +22,14 @@ h1,h2,h3,h4,h5,h6 {
 p {
     font-family: 'Barlow', sans-serif;
 }
+
+.mapa-aviso {
+  max-width: min(320px, 65vw);
+  padding: 10px 12px;
+  border: 1px solid #c6ad69;
+  border-radius: 5px;
+  background: #fff8df;
+  color: #493b17;
+  font: 14px/1.4 Arial, sans-serif;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
